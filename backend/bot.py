@@ -71,12 +71,11 @@ def accept_reject_keyboard(lead_id):
 def format_lead(lead):
     return (
         f"🆕 <b>НОВАЯ ЗАЯВКА</b>\n\n"
-        f"👤 <b>Имя:</b> {lead['name']}\n"
-        f"📞 <b>Телефон:</b> {lead['phone']}\n"
         f"🚗 <b>Модель:</b> {lead['model']}\n"
         f"💬 <b>Комментарий:</b> {lead.get('comment', '—')}\n"
         f"⏰ <b>Время:</b> {lead['time']}\n\n"
-        f"<i>У вас есть 1 минута чтобы ответить</i>"
+        f"<i>Нажмите ✅ чтобы увидеть контакты клиента\n"
+        f"У вас есть 1 минута чтобы ответить</i>"
     )
 
 async def start_cmd(update, context):
