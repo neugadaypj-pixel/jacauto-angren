@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JAC MOTORS ANGREN</title>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .car-page{min-height:100vh;background:var(--gray-50)}
+        .cp-hero{background:var(--dark);padding:120px 24px 60px;text-align:center}
+        .cp-hero h1{color:var(--white);font-size:clamp(32px,5vw,56px);font-weight:700;margin-bottom:8px}
+        .cp-hero .cp-tag{color:var(--accent);font-size:14px;font-weight:600}
+        .cp-back{display:inline-flex;align-items:center;gap:8px;color:rgba(255,255,255,0.5);font-size:14px;margin-bottom:24px;transition:0.3s}
+        .cp-back:hover{color:var(--accent)}
+        .cp-content{max-width:800px;margin:-40px auto 60px;padding:0 24px}
+        .cp-card{background:var(--white);border-radius:var(--radius-xl);padding:40px;box-shadow:var(--shadow-lg)}
+        .cp-card h2{font-size:24px;font-weight:700;margin-bottom:16px}
+        .cp-card p{color:var(--gray-700);font-size:15px;line-height:1.7;margin-bottom:32px}
+        .cp-specs{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+        .cp-spec{background:var(--gray-50);padding:16px 20px;border-radius:12px;display:flex;justify-content:space-between;align-items:center}
+        .cp-spec .spec-label{color:var(--gray-500);font-size:14px}
+        .cp-spec .spec-value{font-weight:700;color:var(--primary);font-size:15px}
+        .cp-cta{text-align:center;margin-top:32px}
+        .cp-placeholder{width:100%;aspect-ratio:16/9;background:var(--gray-900);border-radius:var(--radius-lg);display:flex;align-items:center;justify-content:center;margin-bottom:32px}
+        .cp-placeholder i{font-size:80px;color:rgba(255,255,255,0.1)}
+    </style>
+</head>
+<body>
+
+<header class="header scrolled"><div class="container header-inner">
+    <a href="index.html" class="logo"><img src="https://jacauto.uz/wp-content/uploads/2024/08/photo_2026-02-03_11-41-51.png" alt="JAC MOTORS ANGREN"></a>
+    <nav class="nav" id="nav"><ul class="nav-list">
+        <li><a href="index.html#home" class="nav-link">Главная</a></li>
+        <li><a href="index.html#models" class="nav-link active">Модели</a></li>
+        <li><a href="index.html#about" class="nav-link">О нас</a></li>
+        <li><a href="index.html#services" class="nav-link">Сервис</a></li>
+        <li><a href="index.html#contact" class="nav-link">Контакты</a></li>
+    </ul></nav>
+    <div class="header-right"><a href="tel:+998781131008" class="header-phone"><i class="fas fa-phone-alt"></i> 78 113 10 08</a></div>
+</div></header>
+
+<section class="car-page"><div class="cp-hero">
+    <a href="index.html#models" class="cp-back"><i class="fas fa-arrow-left"></i> Назад к моделям</a>
+    <h1 id="carName">JAC JS8</h1>
+    <div class="cp-tag" id="carTag">Премиальный кроссовер</div>
+</div>
+<div class="cp-content"><div class="cp-card">
+    <div class="cp-placeholder"><i class="fas fa-car" id="carIcon"></i></div>
+    <h2>Характеристики</h2>
+    <p id="carDesc">Загрузка...</p>
+    <div class="cp-specs" id="carSpecs"></div>
+    <div class="cp-cta"><a href="tel:+998781131008" class="btn btn-primary btn-lg">Связаться и узнать цену <i class="fas fa-phone-alt"></i></a></div>
+</div></div></section>
+
+<footer class="footer"><div class="container">
+    <div class="footer-grid">
+        <div class="footer-col footer-brand"><img src="https://jacauto.uz/wp-content/uploads/2024/08/Untitled-design-2.png" alt="JAC" style="height:32px;margin-bottom:12px;filter:brightness(0)invert(1)"><p>Официальный дистрибьютор JAC в Узбекистане.</p></div>
+        <div class="footer-col"><h4>Модели</h4><ul><li><a href="car.html?model=js8">JAC JS8</a></li><li><a href="car.html?model=js6">JAC JS6</a></li><li><a href="car.html?model=j7">JAC J7</a></li><li><a href="car.html?model=q7">JAC Q7</a></li><li><a href="car.html?model=x200">JAC X200</a></li></ul></div>
+    </div>
+    <div class="footer-bottom"><p>&copy; 2026 JAC MOTORS ANGREN</p></div>
+</div></footer>
+
+<script>
+const cars = {
+    js8: {name:'JAC JS8',tag:'Премиальный кроссовер',icon:'fa-car',desc:'JAC JS8 — флагманский кроссовер с просторным салоном и передовыми технологиями. Мощный 2.0L турбодвигатель (190 л.с.), полный привод и богатое оснащение делают его идеальным выбором для города и трассы. Стильный дизайн, панорамная крыша, кожаный салон и продвинутые системы безопасности.'},
+    js6: {name:'JAC JS6',tag:'Городской кроссовер',icon:'fa-car',desc:'JAC JS6 — компактный и стильный кроссовер для города. Экономичный 1.5L турбомотор (150 л.с.), современный дизайн и продуманный салон для комфортных ежедневных поездок. Мультимедиа, камера заднего вида и климат-контроль в стандартной комплектации.'},
+    j7: {name:'JAC J7',tag:'Бизнес-седан',icon:'fa-car',desc:'JAC J7 — элегантный седан для бизнеса и личного пользования. Премиальный интерьер с натуральной кожей, просторный задний ряд и уверенная динамика (1.5L Turbo, 150 л.с.) для статусных поездок. Бесключевой доступ, адаптивный круиз-контроль.'},
+    q7: {name:'JAC Q7',tag:'Семейный кроссовер',icon:'fa-car',desc:'JAC Q7 — просторный 7-местный кроссовер для большой семьи. Третий ряд сидений, мощный 2.0L турбодвигатель (190 л.с.) и полный привод для уверенности на любой дороге. Панорамная крыша, трёхзонный климат-контроль.'},
+    x200: {name:'JAC X200',tag:'Коммерческий фургон',icon:'fa-truck',desc:'JAC X200 — надёжный коммерческий автомобиль для вашего бизнеса. Дизельный 2.8L двигатель (120 л.с.), высокая грузоподъёмность до 5 тонн и низкий расход топлива. Идеален для перевозок, логистики и строительства.'},
+    m3: {name:'JAC M3 Van',tag:'Грузопассажирский',icon:'fa-truck',desc:'JAC M3 Van — универсальный грузопассажирский фургон на 7 мест. Просторный салон-трансформер, экономичный 1.6L двигатель (113 л.с.) и надёжная конструкция. Подходит для семьи, бизнеса и корпоративных поездок.'}
+};
+
+const model = new URLSearchParams(location.search).get('model') || 'js8';
+const c = cars[model] || cars['js8'];
+
+document.getElementById('carName').textContent = c.name;
+document.getElementById('carTag').textContent = c.tag;
+document.getElementById('carDesc').textContent = c.desc;
+document.getElementById('carIcon').className = 'fas ' + c.icon;
+document.title = c.name + ' — JAC MOTORS ANGREN';
+</script>
+</body>
+</html>
