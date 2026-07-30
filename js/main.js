@@ -134,18 +134,53 @@ function initSmoothScroll() {
 function initForm() {
     const form = document.getElementById('contactForm');
     if (!form) return;
-    form.addEventListener('submit', function(e) {
+
+    form.addEventListener('submit', async function(e) {
         e.preventDefault();
-        const inputs = form.querySelectorAll('input[required]');
+
+        const nameInput = form.querySelector('input[type="text"]');
+        const phoneInput = form.querySelector('input[type="tel"]');
+        const modelSelect = form.querySelector('select');
+        const commentInput = form.querySelector('textarea');
+
+        const name = nameInput ? nameInput.value.trim() : '';
+        const phone = phoneInput ? phoneInput.value.trim() : '';
+        const model = modelSelect ? modelSelect.value : '';
+        const comment = commentInput ? commentInput.value.trim() : '';
+
+        // Validate
         let valid = true;
-        inputs.forEach(i => { if (!i.value.trim()) { valid = false; i.style.borderColor = '#E0311A'; } else i.style.borderColor = ''; });
+        if (!name) { nameInput.style.borderColor = '#E0311A'; valid = false; }
+        if (!phone) { phoneInput.style.borderColor = '#E0311A'; valid = false; }
         if (!valid) return;
+
         const btn = form.querySelector('button[type="submit"]');
+        const origText = btn.innerHTML;
         btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Отправка...';
         btn.disabled = true;
-        setTimeout(() => {
-            form.innerHTML = '<div style="text-align:center;padding:40px 0"><i class="fas fa-check-circle" style="font-size:48px;color:#E0311A;margin-bottom:16px"></i><h3>Заявка отправлена!</h3><p style="color:#8A8A8A;margin-top:8px">Мы свяжемся с вами в ближайшее время</p></div>';
-        }, 1500);
+
+        // Send to backend
+        try {
+            const res = await fetch('https://jacauto-angren-backend.onrender.com/api/submit', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name, phone, model, comment })
+            });
+
+            const data = await res.json();
+
+            if (data.ok) {
+                form.innerHTML = '<div style="text-align:center;padding:40px 0"><i class="fas fa-check-circle" style="font-size:48px;color:#E0311A;margin-bottom:16px"></i><h3>Заявка отправлена!</h3><p style="color:#8A8A8A;margin-top:8px">Мы свяжемся с вами в ближайшее время</p></div>';
+            } else {
+                btn.innerHTML = origText;
+                btn.disabled = false;
+                alert(data.error || 'Ошибка отправки. Позвоните нам: 78 113 10 08');
+            }
+        } catch (err) {
+            btn.innerHTML = origText;
+            btn.disabled = false;
+            alert('Сервер временно недоступен. Позвоните нам: 78 113 10 08');
+        }
     });
 }
 
