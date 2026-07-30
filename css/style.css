@@ -71,7 +71,7 @@ ul{list-style:none;}
     padding:16px 0;max-width:1240px;margin:0 auto;padding-left:20px;padding-right:20px;
 }
 .logo{display:flex;align-items:center;}
-.logo img{height:36px;width:auto;}
+.logo img{height:28px;width:auto;max-width:140px;}
 .nav-list{display:flex;gap:32px;}
 .nav-link{
     color:var(--gray);font-size:14px;font-weight:500;
