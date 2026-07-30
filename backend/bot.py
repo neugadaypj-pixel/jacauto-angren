@@ -283,7 +283,7 @@ if __name__ == '__main__':
     print("=" * 60)
     print("🚀 JAC MOTORS ANGREN — Telegram Bot + API")
     print("=" * 60)
-    print(f"🤖 Бот: @{bot.get_me().username if hasattr(bot, 'get_me') else 'JACMotorsAngrenBot'}")
+    print(f"🤖 Бот запущен")
     print(f"📋 Менеджеров: {len(manager_ids)}")
     print(f"🌐 API: http://localhost:5000/api/submit")
     print(f"💚 Health: http://localhost:5000/health")
