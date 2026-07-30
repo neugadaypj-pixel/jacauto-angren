@@ -161,7 +161,7 @@ function initForm() {
 
         // Send to backend
         try {
-            const API_URL = 'http://localhost:5000/api/submit';
+            const API_URL = 'https://jacauto-angren-bot.onrender.com/api/submit';
             const res = await fetch(API_URL, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },

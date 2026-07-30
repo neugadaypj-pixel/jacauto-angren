@@ -292,8 +292,10 @@ if __name__ == '__main__':
     print("Нажми Ctrl+C чтобы остановить")
     print("=" * 60)
 
-    # Запускаем Telegram polling в отдельном потоке
-    threading.Thread(target=app_telegram.run_polling, daemon=True).start()
+    # Запускаем Flask API в отдельном потоке
+    threading.Thread(target=lambda: flask_app.run(host='0.0.0.0', port=5000, use_reloader=False), daemon=True).start()
+    time.sleep(1)
 
-    # Запускаем Flask API на порту 5000
-    flask_app.run(host='0.0.0.0', port=5000)
+    # Запускаем Telegram polling в главном потоке
+    print("🤖 Telegram polling запущен...")
+    app_telegram.run_polling()
