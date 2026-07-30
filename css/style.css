@@ -48,7 +48,8 @@ h1,h2,h3,h4{font-family:var(--font);color:var(--primary);line-height:1.2}
 .header.scrolled{background:rgba(255,255,255,0.85);backdrop-filter:blur(20px) saturate(180%);box-shadow:0 1px 0 rgba(0,0,0,0.05)}
 .header-inner{display:flex;align-items:center;justify-content:space-between;padding:18px 0;max-width:1200px;margin:0 auto;padding-left:24px;padding-right:24px}
 .logo{display:flex;align-items:center}
-.logo img{height:28px;width:auto;max-width:150px}
+.logo img{height:28px;width:auto;max-width:150px;filter:brightness(0) invert(1);transition:filter 0.3s}
+.header.scrolled .logo img{filter:none}
 .nav-list{display:flex;gap:32px}
 .nav-link{color:rgba(255,255,255,0.75);font-size:14px;font-weight:500;transition:0.3s;position:relative;padding:6px 0}
 .header.scrolled .nav-link{color:var(--gray-700)}
