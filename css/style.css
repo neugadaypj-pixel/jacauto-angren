@@ -89,9 +89,10 @@ ul{list-style:none;}
     padding:8px 18px;background:var(--gray-bg);
     border-radius:50px;transition:0.3s;
 }
-.header-phone i{color:var(--primary);font-size:13px;}
-.header-phone:hover{background:var(--primary);color:var(--white);}
+.header-phone i{color:var(--primary);font-size:13px;transition:0.3s;}
+.header-phone:hover{background:var(--primary);color:var(--white);transform:translateY(-1px);box-shadow:0 4px 16px rgba(255,54,0,0.2);}
 .header-phone:hover i{color:var(--white);}
+.header-phone:active{transform:scale(0.96);}
 .hamburger{display:none;flex-direction:column;gap:4px;background:none;border:none;padding:4px;z-index:1001;}
 .hamburger span{display:block;width:24px;height:2px;background:var(--dark);border-radius:2px;transition:0.3s;}
 .hamburger.active span:nth-child(1){transform:rotate(45deg) translate(4px,4px);}
@@ -180,19 +181,24 @@ ul{list-style:none;}
     padding:14px 26px;border-radius:50px;border:none;
     transition:0.3s;white-space:nowrap;cursor:pointer;
 }
-.btn-primary{background:var(--primary);color:var(--white);}
+.btn-primary{background:var(--primary);color:var(--white);transition:0.3s;}
 .btn-primary:hover{background:var(--primary-dark);transform:translateY(-2px);box-shadow:0 8px 24px rgba(255,54,0,0.3);}
+.btn-primary:active{transform:scale(0.96);}
 .btn-telegram{
     background:transparent;color:var(--white);
-    border:2px solid rgba(255,255,255,0.25);
+    border:2px solid rgba(255,255,255,0.25);transition:0.3s;
 }
-.btn-telegram:hover{background:rgba(255,255,255,0.1);border-color:var(--white);transform:translateY(-2px);}
+.btn-telegram:hover{background:rgba(255,255,255,0.1);border-color:var(--white);transform:translateY(-2px);box-shadow:0 8px 24px rgba(255,255,255,0.08);}
+.btn-telegram:active{transform:scale(0.96);}
 .btn-outline{
     background:transparent;color:var(--primary);
-    border:2px solid var(--primary);
+    border:2px solid var(--primary);transition:0.3s;
 }
-.btn-outline:hover{background:var(--primary);color:var(--white);transform:translateY(-2px);}
-.btn-lg{padding:18px 36px;font-size:16px;}
+.btn-outline:hover{background:var(--primary);color:var(--white);transform:translateY(-2px);box-shadow:0 8px 24px rgba(255,54,0,0.25);}
+.btn-outline:active{transform:scale(0.96);}
+.btn-lg{padding:18px 36px;font-size:16px;transition:0.3s;}
+.btn-lg:hover{transform:translateY(-2px);box-shadow:0 12px 32px rgba(255,54,0,0.35);}
+.btn-lg:active{transform:scale(0.96);}
 .btn-block{width:100%;justify-content:center;}
 .social-link{
     width:42px;height:42px;
@@ -201,7 +207,8 @@ ul{list-style:none;}
     border-radius:50%;color:var(--white);font-size:15px;
     transition:0.3s;
 }
-.social-link:hover{background:var(--primary);border-color:var(--primary);transform:translateY(-3px);}
+.social-link:hover{background:var(--primary);border-color:var(--primary);transform:translateY(-3px);box-shadow:0 8px 20px rgba(255,54,0,0.25);}
+.social-link:active{transform:scale(0.9) translateY(-3px);}
 
 /* ---------- Featured Cars ---------- */
 .featured-cars{position:relative;z-index:3;margin-top:-60px;padding-bottom:80px;}
@@ -257,7 +264,7 @@ ul{list-style:none;}
 .car-specs li{display:flex;align-items:center;gap:8px;color:var(--gray);font-size:13px;}
 .car-specs i{color:var(--primary);width:14px;text-align:center;font-size:12px;}
 .car-link{display:inline-flex;align-items:center;gap:8px;color:var(--primary);font-weight:600;font-size:13px;transition:0.3s;}
-.car-link:hover{gap:14px;}
+.car-link:hover{gap:14px;opacity:0.8;}
 .swiper-button-prev,.swiper-button-next{
     width:44px;height:44px;background:var(--white);
     border-radius:50%;color:var(--dark);box-shadow:var(--shadow);
@@ -323,7 +330,8 @@ ul{list-style:none;}
     border-radius:var(--radius);overflow:hidden;transition:0.3s;
 }
 .step.active{border-color:rgba(255,54,0,0.3);}
-.step-header{display:flex;align-items:center;gap:14px;padding:18px 20px;cursor:pointer;user-select:none;}
+.step-header{display:flex;align-items:center;gap:14px;padding:18px 20px;cursor:pointer;user-select:none;transition:0.3s;}
+.step-header:hover{background:rgba(255,54,0,0.03);}
 .step-number{font-size:22px;font-weight:800;color:var(--primary);min-width:36px;}
 .step-header h3{flex:1;font-size:15px;font-weight:600;color:var(--dark);}
 .step-header i{color:var(--gray);font-size:13px;transition:0.3s;}
@@ -385,7 +393,7 @@ ul{list-style:none;}
 .news-card-body{padding:18px;}
 .news-card-body h3{font-size:17px;font-weight:700;margin-bottom:14px;line-height:1.4;color:var(--dark);}
 .news-link{display:inline-flex;align-items:center;gap:8px;color:var(--primary);font-weight:600;font-size:13px;transition:0.3s;}
-.news-link:hover{gap:14px;}
+.news-link:hover{gap:14px;opacity:0.8;}
 .news-card-horizontal{display:flex;flex-direction:row;}
 .news-card-horizontal .news-card-image{width:160px;min-width:160px;aspect-ratio:auto;}
 .news-list{display:flex;flex-direction:column;gap:18px;}
@@ -410,7 +418,8 @@ ul{list-style:none;}
     border:1px solid var(--gray-lighter);border-radius:50%;color:var(--gray);
     font-size:14px;transition:0.3s;
 }
-.contact-social a:hover{background:var(--primary);border-color:var(--primary);color:var(--white);}
+.contact-social a:hover{background:var(--primary);border-color:var(--primary);color:var(--white);transform:translateY(-2px);box-shadow:0 4px 12px rgba(255,54,0,0.2);}
+.contact-social a:active{transform:scale(0.9);}
 .contact-form-wrapper{
     background:var(--white);border:1px solid var(--gray-lighter);
     border-radius:var(--radius-lg);padding:36px;box-shadow:var(--shadow-sm);
@@ -445,7 +454,8 @@ ul{list-style:none;}
     background:rgba(255,255,255,0.06);border-radius:50%;color:var(--gray-light);
     font-size:14px;transition:0.3s;
 }
-.footer-social a:hover{background:var(--primary);color:var(--white);}
+.footer-social a:hover{background:var(--primary);color:var(--white);transform:translateY(-3px);box-shadow:0 6px 16px rgba(255,54,0,0.3);}
+.footer-social a:active{transform:scale(0.9);}
 .footer-bottom{border-top:1px solid rgba(255,255,255,0.06);padding-top:22px;text-align:center;}
 .footer-bottom p{color:var(--gray-light);font-size:12px;}
 
