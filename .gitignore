@@ -1,0 +1,17 @@
+# Dependencies
+node_modules/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+*.swp
+*.swo
+
+# Cache
+*.log
+
+# Downloaded reference (not part of the actual site)
+jacauto_page.html
