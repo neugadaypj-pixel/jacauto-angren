@@ -91,7 +91,7 @@ ul{list-style:none;}
     border-radius:50px;transition:0.3s;
 }
 .header-phone i{color:var(--primary);font-size:13px;transition:0.3s;}
-.header-phone:hover{background:var(--primary);color:var(--white);transform:translateY(-1px);box-shadow:0 4px 16px rgba(255,54,0,0.2);}
+.header-phone:hover{background:var(--primary);color:var(--white);transform:translateY(-4px);box-shadow:0 8px 20px rgba(255,54,0,0.25);}
 .header-phone:hover i{color:var(--white);}
 .header-phone:active{transform:scale(0.96);}
 .hamburger{display:none;flex-direction:column;gap:4px;background:none;border:none;padding:4px;z-index:1001;}
@@ -183,22 +183,22 @@ ul{list-style:none;}
     transition:0.3s;white-space:nowrap;cursor:pointer;
 }
 .btn-primary{background:var(--primary);color:var(--white);transition:0.3s;}
-.btn-primary:hover{background:var(--primary-dark);transform:translateY(-2px);box-shadow:0 8px 24px rgba(255,54,0,0.3);}
+.btn-primary:hover{background:var(--primary-dark);transform:translateY(-5px);box-shadow:0 12px 28px rgba(255,54,0,0.35);}
 .btn-primary:active{transform:scale(0.96);}
 .btn-telegram{
     background:transparent;color:var(--white);
     border:2px solid rgba(255,255,255,0.25);transition:0.3s;
 }
-.btn-telegram:hover{background:rgba(255,255,255,0.1);border-color:var(--white);transform:translateY(-2px);box-shadow:0 8px 24px rgba(255,255,255,0.08);}
+.btn-telegram:hover{background:rgba(255,255,255,0.1);border-color:var(--white);transform:translateY(-5px);box-shadow:0 12px 28px rgba(255,255,255,0.12);}
 .btn-telegram:active{transform:scale(0.96);}
 .btn-outline{
     background:transparent;color:var(--primary);
     border:2px solid var(--primary);transition:0.3s;
 }
-.btn-outline:hover{background:var(--primary);color:var(--white);transform:translateY(-2px);box-shadow:0 8px 24px rgba(255,54,0,0.25);}
+.btn-outline:hover{background:var(--primary);color:var(--white);transform:translateY(-5px);box-shadow:0 12px 28px rgba(255,54,0,0.3);}
 .btn-outline:active{transform:scale(0.96);}
 .btn-lg{padding:18px 36px;font-size:16px;transition:0.3s;}
-.btn-lg:hover{transform:translateY(-2px);box-shadow:0 12px 32px rgba(255,54,0,0.35);}
+.btn-lg:hover{transform:translateY(-5px);box-shadow:0 16px 36px rgba(255,54,0,0.4);}
 .btn-lg:active{transform:scale(0.96);}
 .btn-block{width:100%;justify-content:center;}
 .social-link{
@@ -208,8 +208,8 @@ ul{list-style:none;}
     border-radius:50%;color:var(--white);font-size:15px;
     transition:0.3s;
 }
-.social-link:hover{background:var(--primary);border-color:var(--primary);transform:translateY(-3px);box-shadow:0 8px 20px rgba(255,54,0,0.25);}
-.social-link:active{transform:scale(0.9) translateY(-3px);}
+.social-link:hover{background:var(--primary);border-color:var(--primary);transform:translateY(-5px);box-shadow:0 10px 24px rgba(255,54,0,0.3);}
+.social-link:active{transform:scale(0.9) translateY(-5px);}
 
 /* ---------- Featured Cars ---------- */
 .featured-cars{position:relative;z-index:3;margin-top:-60px;padding-bottom:80px;}
@@ -419,7 +419,7 @@ ul{list-style:none;}
     border:1px solid var(--gray-lighter);border-radius:50%;color:var(--gray);
     font-size:14px;transition:0.3s;
 }
-.contact-social a:hover{background:var(--primary);border-color:var(--primary);color:var(--white);transform:translateY(-2px);box-shadow:0 4px 12px rgba(255,54,0,0.2);}
+.contact-social a:hover{background:var(--primary);border-color:var(--primary);color:var(--white);transform:translateY(-5px);box-shadow:0 8px 18px rgba(255,54,0,0.25);}
 .contact-social a:active{transform:scale(0.9);}
 .contact-form-wrapper{
     background:var(--white);border:1px solid var(--gray-lighter);
@@ -455,7 +455,7 @@ ul{list-style:none;}
     background:rgba(255,255,255,0.06);border-radius:50%;color:var(--gray-light);
     font-size:14px;transition:0.3s;
 }
-.footer-social a:hover{background:var(--primary);color:var(--white);transform:translateY(-3px);box-shadow:0 6px 16px rgba(255,54,0,0.3);}
+.footer-social a:hover{background:var(--primary);color:var(--white);transform:translateY(-5px);box-shadow:0 10px 20px rgba(255,54,0,0.35);}
 .footer-social a:active{transform:scale(0.9);}
 .footer-bottom{border-top:1px solid rgba(255,255,255,0.06);padding-top:22px;text-align:center;}
 .footer-bottom p{color:var(--gray-light);font-size:12px;}
