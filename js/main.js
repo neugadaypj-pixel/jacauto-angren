@@ -3,10 +3,10 @@
    ============================================ */
 
 document.addEventListener('DOMContentLoaded', () => {
-    initHeroTypewriter();
+    initHeroReveal();
+    initAnimatedHeadings();
     initPreloader();
     initHeader();
-    initHeroSlider();
     initModelsSlider();
     initMobileMenu();
     initAccordion();
@@ -16,50 +16,47 @@ document.addEventListener('DOMContentLoaded', () => {
     initScrollNavHighlight();
 });
 
-/* ---------- Hero Typewriter (letter-by-letter reveal) ---------- */
-function initHeroTypewriter() {
+/* ---------- Hero Word-by-Word Reveal (starts immediately) ---------- */
+function initHeroReveal() {
     const lines = document.querySelectorAll('.hero-title-line');
     const subtitle = document.querySelector('.hero-subtitle');
     const buttons = document.querySelector('.hero-buttons');
     const social = document.querySelector('.hero-social');
     
-    // Hide subtitle/buttons/social initially
     if (subtitle) { subtitle.style.opacity = '0'; subtitle.style.transform = 'translateY(30px)'; }
     if (buttons) { buttons.style.opacity = '0'; buttons.style.transform = 'translateY(30px)'; }
     if (social) { social.style.opacity = '0'; social.style.transform = 'translateY(30px)'; }
     
     let totalDuration = 0;
     
-    // Animate each title line letter by letter
     lines.forEach((line, lineIndex) => {
-        const text = line.textContent;
+        const text = line.textContent.trim();
         line.textContent = '';
         line.style.opacity = '1';
         
-        [...text].forEach((char, i) => {
+        const words = text.split(' ');
+        words.forEach((word, i) => {
             const span = document.createElement('span');
-            span.className = 'hero-char';
-            span.textContent = char === ' ' ? '\u00A0' : char;
-            span.style.cssText = `
-                opacity:0;
-                display:inline-block;
-                transform:translateY(40px) rotateX(-90deg);
-                transition:opacity 0.3s ease,transform 0.45s cubic-bezier(0.22,1,0.36,1);
-            `;
+            span.textContent = word;
+            span.style.cssText = 'display:inline-block;opacity:0;transform:translateY(60px);transition:opacity 0.35s ease,transform 0.5s cubic-bezier(0.22,1,0.36,1);';
             line.appendChild(span);
             
-            const delay = lineIndex * 1200 + i * 45;
-            totalDuration = Math.max(totalDuration, delay);
+            // Add space after each word except the last
+            if (i < words.length - 1) {
+                line.appendChild(document.createTextNode(' '));
+            }
+            
+            const delay = lineIndex * 500 + i * 100;
+            totalDuration = Math.max(totalDuration, delay + 500);
             
             setTimeout(() => {
                 span.style.opacity = '1';
-                span.style.transform = 'translateY(0) rotateX(0)';
+                span.style.transform = 'translateY(0)';
             }, delay);
         });
     });
     
-    // Reveal subtitle, buttons, social after title animation
-    const fadeIn = (el, delay) => {
+    const show = (el, delay) => {
         setTimeout(() => {
             if (el) {
                 el.style.transition = 'opacity 0.6s ease,transform 0.6s cubic-bezier(0.22,1,0.36,1)';
@@ -69,9 +66,42 @@ function initHeroTypewriter() {
         }, delay);
     };
     
-    fadeIn(subtitle, totalDuration - 200);
-    fadeIn(buttons, totalDuration + 100);
-    fadeIn(social, totalDuration + 400);
+    show(subtitle, totalDuration - 300);
+    show(buttons, totalDuration);
+    show(social, totalDuration + 300);
+}
+
+/* ---------- Animated Section Headings (clip-path reveal like jacauto.uz) ---------- */
+function initAnimatedHeadings() {
+    const headings = document.querySelectorAll('.section-title, .section-tag');
+    
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('heading-revealed');
+                observer.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.2 });
+    
+    headings.forEach(h => {
+        h.style.opacity = '0';
+        h.style.transform = 'translateY(60px)';
+        h.style.clipPath = 'inset(0 0 100% 0)';
+        h.style.transition = 'opacity 0.6s ease,transform 0.7s cubic-bezier(0.22,1,0.36,1),clip-path 0.7s cubic-bezier(0.22,1,0.36,1)';
+        observer.observe(h);
+    });
+    
+    // CSS class that gets added when in view
+    const style = document.createElement('style');
+    style.textContent = `
+        .heading-revealed {
+            opacity: 1 !important;
+            transform: translateY(0) !important;
+            clip-path: inset(0 0 0% 0) !important;
+        }
+    `;
+    document.head.appendChild(style);
 }
 
 /* ---------- Preloader ---------- */
@@ -82,7 +112,6 @@ function initPreloader() {
     window.addEventListener('load', () => {
         setTimeout(() => {
             preloader.classList.add('hidden');
-            // Remove from DOM after animation
             setTimeout(() => {
                 if (preloader) preloader.style.display = 'none';
             }, 500);
@@ -95,31 +124,12 @@ function initHeader() {
     const header = document.getElementById('header');
     if (!header) return;
     
+    let lastScroll = 0;
     window.addEventListener('scroll', () => {
-        if (window.scrollY > 50) {
-            header.classList.add('scrolled');
-        } else {
-            header.classList.remove('scrolled');
-        }
-    });
-}
-
-/* ---------- Hero Slider ---------- */
-function initHeroSlider() {
-    const sliderEl = document.getElementById('heroSlider');
-    if (!sliderEl) return;
-    
-    new Swiper(sliderEl, {
-        slidesPerView: 1,
-        loop: true,
-        effect: 'fade',
-        fadeEffect: { crossFade: true },
-        autoplay: {
-            delay: 3000,
-            disableOnInteraction: false,
-        },
-        speed: 800,
-        allowTouchMove: false,
+        const scrollY = window.scrollY;
+        if (scrollY > 50) header.classList.add('scrolled');
+        else header.classList.remove('scrolled');
+        lastScroll = scrollY;
     });
 }
 
@@ -129,22 +139,11 @@ function initModelsSlider() {
     if (!sliderEl) return;
     
     new Swiper(sliderEl, {
-        slidesPerView: 1,
-        spaceBetween: 24,
-        loop: true,
-        autoplay: {
-            delay: 3500,
-            disableOnInteraction: false,
-        },
+        slidesPerView: 1, spaceBetween: 24, loop: true,
+        autoplay: { delay: 3500, disableOnInteraction: false },
         speed: 600,
-        navigation: {
-            prevEl: '.swiper-button-prev',
-            nextEl: '.swiper-button-next',
-        },
-        breakpoints: {
-            640: { slidesPerView: 2 },
-            1024: { slidesPerView: 3 },
-        }
+        navigation: { prevEl: '.swiper-button-prev', nextEl: '.swiper-button-next' },
+        breakpoints: { 640: { slidesPerView: 2 }, 1024: { slidesPerView: 3 } }
     });
 }
 
@@ -152,8 +151,6 @@ function initModelsSlider() {
 function initMobileMenu() {
     const hamburger = document.getElementById('hamburger');
     const nav = document.getElementById('nav');
-    const navLinks = document.querySelectorAll('.nav-link');
-    
     if (!hamburger || !nav) return;
     
     hamburger.addEventListener('click', () => {
@@ -162,8 +159,7 @@ function initMobileMenu() {
         document.body.style.overflow = nav.classList.contains('active') ? 'hidden' : '';
     });
     
-    // Close menu on link click
-    navLinks.forEach(link => {
+    document.querySelectorAll('.nav-link').forEach(link => {
         link.addEventListener('click', () => {
             hamburger.classList.remove('active');
             nav.classList.remove('active');
@@ -171,7 +167,6 @@ function initMobileMenu() {
         });
     });
     
-    // Close menu on Escape
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape' && nav.classList.contains('active')) {
             hamburger.classList.remove('active');
@@ -183,57 +178,37 @@ function initMobileMenu() {
 
 /* ---------- How We Work Accordion ---------- */
 function initAccordion() {
-    const stepHeaders = document.querySelectorAll('.step-header');
-    
-    stepHeaders.forEach(header => {
+    document.querySelectorAll('.step-header').forEach(header => {
         header.addEventListener('click', () => {
             const step = header.parentElement;
-            const isActive = step.classList.contains('active');
-            
-            // Close all
+            const wasActive = step.classList.contains('active');
             document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
-            
-            // Open clicked (if wasn't already active)
-            if (!isActive) {
-                step.classList.add('active');
-            }
+            if (!wasActive) step.classList.add('active');
         });
     });
 }
 
 /* ---------- AOS (Animate On Scroll) ---------- */
 function initAOS() {
-    const observerOptions = {
-        root: null,
-        rootMargin: '0px 0px -50px 0px',
-        threshold: 0.05
-    };
-    
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 const delay = parseInt(entry.target.dataset.aosDelay) || 0;
-                setTimeout(() => {
-                    entry.target.classList.add('aos-animate');
-                }, delay);
+                setTimeout(() => entry.target.classList.add('aos-animate'), delay);
                 observer.unobserve(entry.target);
             }
         });
-    }, observerOptions);
+    }, { rootMargin: '0px 0px -50px 0px', threshold: 0.05 });
     
-    document.querySelectorAll('[data-aos]').forEach(el => {
-        observer.observe(el);
-    });
+    document.querySelectorAll('[data-aos]').forEach(el => observer.observe(el));
     
-    // Fallback: if any elements are already in view after 800ms, reveal them
+    // Fallback — reveal any in-view elements after 800ms
     setTimeout(() => {
         document.querySelectorAll('[data-aos]:not(.aos-animate)').forEach(el => {
             const rect = el.getBoundingClientRect();
             if (rect.top < window.innerHeight + 100) {
                 const delay = parseInt(el.dataset.aosDelay) || 0;
-                setTimeout(() => {
-                    el.classList.add('aos-animate');
-                }, delay);
+                setTimeout(() => el.classList.add('aos-animate'), delay);
             }
         });
     }, 800);
@@ -245,19 +220,10 @@ function initSmoothScroll() {
         anchor.addEventListener('click', function(e) {
             const targetId = this.getAttribute('href');
             if (targetId === '#') return;
-            
             const target = document.querySelector(targetId);
             if (!target) return;
-            
             e.preventDefault();
-            
-            const headerHeight = 80;
-            const targetPosition = target.getBoundingClientRect().top + window.pageYOffset - headerHeight;
-            
-            window.scrollTo({
-                top: targetPosition,
-                behavior: 'smooth'
-            });
+            window.scrollTo({ top: target.getBoundingClientRect().top + window.pageYOffset - 80, behavior: 'smooth' });
         });
     });
 }
@@ -266,27 +232,18 @@ function initSmoothScroll() {
 function initScrollNavHighlight() {
     const sections = document.querySelectorAll('section[id]');
     const navLinks = document.querySelectorAll('.nav-link');
-    
     if (!sections.length || !navLinks.length) return;
     
     window.addEventListener('scroll', () => {
         let current = '';
-        const scrollPos = window.scrollY + 100;
-        
+        const scrollPos = window.scrollY + 120;
         sections.forEach(section => {
-            const sectionTop = section.offsetTop;
-            const sectionHeight = section.offsetHeight;
-            
-            if (scrollPos >= sectionTop && scrollPos < sectionTop + sectionHeight) {
-                current = section.getAttribute('id');
-            }
+            const top = section.offsetTop;
+            if (scrollPos >= top && scrollPos < top + section.offsetHeight) current = section.getAttribute('id');
         });
-        
         navLinks.forEach(link => {
             link.classList.remove('active');
-            if (link.getAttribute('href') === `#${current}`) {
-                link.classList.add('active');
-            }
+            if (link.getAttribute('href') === '#' + current) link.classList.add('active');
         });
     });
 }
@@ -298,32 +255,16 @@ function initForm() {
     
     form.addEventListener('submit', function(e) {
         e.preventDefault();
-        
-        // Simple validation
         const inputs = form.querySelectorAll('input[required]');
         let valid = true;
-        
-        inputs.forEach(input => {
-            if (!input.value.trim()) {
-                valid = false;
-                input.style.borderColor = '#FF3600';
-                setTimeout(() => {
-                    input.style.borderColor = '';
-                }, 2000);
-            }
-        });
-        
+        inputs.forEach(input => { if (!input.value.trim()) { valid = false; input.style.borderColor = '#FF3600'; setTimeout(() => input.style.borderColor = '', 2000); } });
         if (!valid) return;
         
-        // Simulate submission
         const btn = form.querySelector('button[type="submit"]');
-        const originalText = btn.innerHTML;
-        
         btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Отправка...';
         btn.disabled = true;
         
         setTimeout(() => {
-            // Success state
             form.innerHTML = `
                 <div class="form-success" style="text-align:center;padding:40px 20px;">
                     <div style="width:80px;height:80px;background:rgba(255,54,0,0.1);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;">
@@ -331,24 +272,18 @@ function initForm() {
                     </div>
                     <h3>Заявка отправлена!</h3>
                     <p style="color:#6b7280;">Мы свяжемся с вами в ближайшее время</p>
-                </div>
-            `;
-            
-            // Reset after 5 seconds
-            setTimeout(() => {
-                window.location.reload();
-            }, 5000);
+                </div>`;
+            setTimeout(() => window.location.reload(), 5000);
         }, 1500);
     });
 }
 
-/* ---------- Parallax Effect on Hero ---------- */
+/* ---------- Parallax on Hero ---------- */
 window.addEventListener('scroll', () => {
     const scrollY = window.scrollY;
     const heroContent = document.querySelector('.hero-content');
-    
     if (heroContent && scrollY < window.innerHeight) {
-        heroContent.style.transform = `translateY(${scrollY * 0.3}px)`;
+        heroContent.style.transform = 'translateY(' + (scrollY * 0.3) + 'px)';
         heroContent.style.opacity = 1 - scrollY / (window.innerHeight * 0.8);
     }
 });
