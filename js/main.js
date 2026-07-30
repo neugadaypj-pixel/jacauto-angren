@@ -4,7 +4,6 @@
 
 document.addEventListener('DOMContentLoaded', () => {
     initPreloader();
-    initCustomCursor();
     initHeader();
     initHeroSlider();
     initModelsSlider();
@@ -29,65 +28,6 @@ function initPreloader() {
                 preloader.style.display = 'none';
             }, 500);
         }, 600);
-    });
-}
-
-/* ---------- Custom Cursor ---------- */
-function initCustomCursor() {
-    const cursor = document.getElementById('customCursor');
-    const dot = document.getElementById('cursorDot');
-    if (!cursor || !dot) return;
-    
-    let mouseX = 0, mouseY = 0;
-    let cursorX = 0, cursorY = 0;
-    
-    document.addEventListener('mousemove', (e) => {
-        mouseX = e.clientX;
-        mouseY = e.clientY;
-        
-        // Dot follows instantly
-        dot.style.left = mouseX + 'px';
-        dot.style.top = mouseY + 'px';
-    });
-    
-    // Smooth follow for ring cursor
-    function animateCursor() {
-        cursorX += (mouseX - cursorX) * 0.15;
-        cursorY += (mouseY - cursorY) * 0.15;
-        
-        cursor.style.left = cursorX + 'px';
-        cursor.style.top = cursorY + 'px';
-        
-        requestAnimationFrame(animateCursor);
-    }
-    animateCursor();
-    
-    // Hover effects
-    const hoverTargets = document.querySelectorAll('a, button, .hamburger, .step-header, input, select, textarea');
-    
-    hoverTargets.forEach(el => {
-        el.addEventListener('mouseenter', () => {
-            cursor.classList.add('hover');
-            dot.classList.add('hidden');
-        });
-        el.addEventListener('mouseleave', () => {
-            cursor.classList.remove('hover');
-            dot.classList.remove('hidden');
-        });
-    });
-    
-    // Hide default cursor
-    document.body.style.cursor = 'none';
-    
-    // Hide custom cursor when leaving window
-    document.addEventListener('mouseleave', () => {
-        cursor.classList.add('hidden');
-        dot.classList.add('hidden');
-    });
-    
-    document.addEventListener('mouseenter', () => {
-        cursor.classList.remove('hidden');
-        dot.classList.remove('hidden');
     });
 }
 
