@@ -3,6 +3,7 @@
    ============================================ */
 
 document.addEventListener('DOMContentLoaded', () => {
+    initHeroTypewriter();
     initPreloader();
     initHeader();
     initHeroSlider();
@@ -15,6 +16,64 @@ document.addEventListener('DOMContentLoaded', () => {
     initScrollNavHighlight();
 });
 
+/* ---------- Hero Typewriter (letter-by-letter reveal) ---------- */
+function initHeroTypewriter() {
+    const lines = document.querySelectorAll('.hero-title-line');
+    const subtitle = document.querySelector('.hero-subtitle');
+    const buttons = document.querySelector('.hero-buttons');
+    const social = document.querySelector('.hero-social');
+    
+    // Hide subtitle/buttons/social initially
+    if (subtitle) { subtitle.style.opacity = '0'; subtitle.style.transform = 'translateY(30px)'; }
+    if (buttons) { buttons.style.opacity = '0'; buttons.style.transform = 'translateY(30px)'; }
+    if (social) { social.style.opacity = '0'; social.style.transform = 'translateY(30px)'; }
+    
+    let totalDuration = 0;
+    
+    // Animate each title line letter by letter
+    lines.forEach((line, lineIndex) => {
+        const text = line.textContent;
+        line.textContent = '';
+        line.style.opacity = '1';
+        
+        [...text].forEach((char, i) => {
+            const span = document.createElement('span');
+            span.className = 'hero-char';
+            span.textContent = char === ' ' ? '\u00A0' : char;
+            span.style.cssText = `
+                opacity:0;
+                display:inline-block;
+                transform:translateY(40px) rotateX(-90deg);
+                transition:opacity 0.3s ease,transform 0.45s cubic-bezier(0.22,1,0.36,1);
+            `;
+            line.appendChild(span);
+            
+            const delay = lineIndex * 1200 + i * 45;
+            totalDuration = Math.max(totalDuration, delay);
+            
+            setTimeout(() => {
+                span.style.opacity = '1';
+                span.style.transform = 'translateY(0) rotateX(0)';
+            }, delay);
+        });
+    });
+    
+    // Reveal subtitle, buttons, social after title animation
+    const fadeIn = (el, delay) => {
+        setTimeout(() => {
+            if (el) {
+                el.style.transition = 'opacity 0.6s ease,transform 0.6s cubic-bezier(0.22,1,0.36,1)';
+                el.style.opacity = '1';
+                el.style.transform = 'translateY(0)';
+            }
+        }, delay);
+    };
+    
+    fadeIn(subtitle, totalDuration - 200);
+    fadeIn(buttons, totalDuration + 100);
+    fadeIn(social, totalDuration + 400);
+}
+
 /* ---------- Preloader ---------- */
 function initPreloader() {
     const preloader = document.getElementById('preloader');
@@ -25,7 +84,7 @@ function initPreloader() {
             preloader.classList.add('hidden');
             // Remove from DOM after animation
             setTimeout(() => {
-                preloader.style.display = 'none';
+                if (preloader) preloader.style.display = 'none';
             }, 500);
         }, 600);
     });
@@ -146,14 +205,14 @@ function initAccordion() {
 function initAOS() {
     const observerOptions = {
         root: null,
-        rootMargin: '0px 0px -80px 0px',
-        threshold: 0.1
+        rootMargin: '0px 0px -50px 0px',
+        threshold: 0.05
     };
     
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
-                const delay = entry.target.dataset.aosDelay || 0;
+                const delay = parseInt(entry.target.dataset.aosDelay) || 0;
                 setTimeout(() => {
                     entry.target.classList.add('aos-animate');
                 }, delay);
@@ -165,6 +224,19 @@ function initAOS() {
     document.querySelectorAll('[data-aos]').forEach(el => {
         observer.observe(el);
     });
+    
+    // Fallback: if any elements are already in view after 800ms, reveal them
+    setTimeout(() => {
+        document.querySelectorAll('[data-aos]:not(.aos-animate)').forEach(el => {
+            const rect = el.getBoundingClientRect();
+            if (rect.top < window.innerHeight + 100) {
+                const delay = parseInt(el.dataset.aosDelay) || 0;
+                setTimeout(() => {
+                    el.classList.add('aos-animate');
+                }, delay);
+            }
+        });
+    }, 800);
 }
 
 /* ---------- Smooth Scroll ---------- */
@@ -257,8 +329,8 @@ function initForm() {
                     <div style="width:80px;height:80px;background:rgba(255,54,0,0.1);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;">
                         <i class="fas fa-check" style="color:#FF3600;font-size:32px;"></i>
                     </div>
-                    <h3 style="margin-bottom:8px;">Заявка отправлена!</h3>
-                    <p style="color:#8890A4;">Мы свяжемся с вами в ближайшее время</p>
+                    <h3>Заявка отправлена!</h3>
+                    <p style="color:#6b7280;">Мы свяжемся с вами в ближайшее время</p>
                 </div>
             `;
             
