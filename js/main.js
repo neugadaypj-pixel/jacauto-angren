@@ -1,5 +1,5 @@
 /* ============================================
-   JAC Auto Ангрен - Main JavaScript
+   JAC MOTORS ANGREN - Main JavaScript
    ============================================ */
 
 document.addEventListener('DOMContentLoaded', () => {
