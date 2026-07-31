@@ -235,7 +235,11 @@ def webhook():
 
 @app.route('/health')
 def health():
-    return jsonify({'ok': True, 'managers': len(manager_ids), 'pending': len(pending)})
+    return jsonify({'ok': True, 'managers': len(manager_ids), 'pending': len(pending), 'manager_ids': manager_ids})
+
+@app.route('/webhook/test', methods=['GET'])
+def webhook_test():
+    return jsonify({'webhook': 'endpoint alive', 'method': request.method})
 
 @app.route('/')
 def index():
