@@ -201,6 +201,12 @@ h1,h2,h3,h4{font-family:var(--font);color:var(--primary);line-height:1.2}
 .footer-bottom{border-top:1px solid rgba(255,255,255,0.06);padding-top:24px;text-align:center}
 .footer-bottom p{color:rgba(255,255,255,0.3);font-size:13px}
 
+/* Scrollbar — hidden until hover */
+::-webkit-scrollbar{width:0}
+:hover::-webkit-scrollbar{width:6px}
+:hover::-webkit-scrollbar-track{background:var(--gray-100)}
+:hover::-webkit-scrollbar-thumb{background:var(--gray-200);border-radius:3px}
+
 /* Reveal animations */
 .reveal-up,.reveal-left,.reveal-right{opacity:0;transition:opacity 0.7s var(--ease),transform 0.7s var(--ease)}
 .reveal-up{transform:translateY(40px)}
