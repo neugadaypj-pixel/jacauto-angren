@@ -111,7 +111,10 @@ def send_to_random_sync(lead_id):
     mgr = random.choice(available)
     lead['current_manager'] = mgr
     try:
-        msg = bot.send_message(chat_id=mgr, text=msg_text(lead), reply_markup=keyboard(lead_id), parse_mode='HTML')
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
+        msg = loop.run_until_complete(bot.send_message(chat_id=mgr, text=msg_text(lead), reply_markup=keyboard(lead_id), parse_mode='HTML'))
+        loop.close()
         lead['message_id'] = msg.message_id
     except Exception as e:
         print(f"Send error: {e}")
@@ -124,7 +127,11 @@ def auto_reject(lead_id):
     if not lead or lead.get('status') != 'pending': return
     mid = lead.get('current_manager')
     if mid:
-        try: bot.edit_message_text(chat_id=mid, message_id=lead['message_id'], text=msg_text(lead) + "\n\n⏰ <b>Время истекло</b>", parse_mode='HTML')
+        try:
+            loop = asyncio.new_event_loop()
+            asyncio.set_event_loop(loop)
+            loop.run_until_complete(bot.edit_message_text(chat_id=mid, message_id=lead['message_id'], text=msg_text(lead) + "\n\n⏰ <b>Время истекло</b>", parse_mode='HTML'))
+            loop.close()
         except: pass
         lead.setdefault('rejected_by', []).append(mid)
     send_to_random_sync(lead_id)
