@@ -225,8 +225,10 @@ def index():
 # ================ MAIN ================
 if __name__ == '__main__':
     print("=" * 60)
-    print("🚀 JAC MOTORS ANGREN — Bot Backend (Webhook)")
+    print("🚀 JAC MOTORS ANGREN — Bot Backend (Polling)")
     print(f"📋 Managers: {len(manager_ids)} — {manager_ids}")
     print("=" * 60)
+    # Start polling in separate thread
+    threading.Thread(target=telegram_app.run_polling, daemon=True).start()
     port = int(os.environ.get('PORT', 5000))
     app.run(host='0.0.0.0', port=port)
