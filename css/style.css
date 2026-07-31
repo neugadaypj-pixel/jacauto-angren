@@ -47,9 +47,12 @@ h1,h2,h3,h4{font-family:var(--font);color:var(--primary);line-height:1.2}
 .header{position:fixed;top:0;left:0;right:0;z-index:1000;padding:0;transition:0.4s var(--ease)}
 .header.scrolled{background:rgba(255,255,255,0.85);backdrop-filter:blur(20px) saturate(180%);box-shadow:0 1px 0 rgba(0,0,0,0.05)}
 .header-inner{display:flex;align-items:center;justify-content:space-between;padding:18px 0;max-width:1200px;margin:0 auto;padding-left:24px;padding-right:24px}
-.logo-text-link{font-size:18px;font-weight:800;color:rgba(255,255,255,0.9);letter-spacing:-0.5px;transition:color 0.4s var(--ease)}
-.logo-dot{color:var(--accent);margin:0 2px}
-.header.scrolled .logo-text-link{color:var(--primary)}
+.logo{display:flex;align-items:center}
+.logo img{height:28px;width:auto;max-width:150px}
+.logo .logo-white{display:block}
+.header.scrolled .logo .logo-white{display:none}
+.logo-black{display:none!important}
+.header.scrolled .logo .logo-black{display:block!important}
 .nav-list{display:flex;gap:32px}
 .nav-link{color:rgba(255,255,255,0.75);font-size:14px;font-weight:500;transition:0.4s var(--ease);position:relative;padding:6px 0}
 .header.scrolled .nav-link{color:var(--gray-700)}
