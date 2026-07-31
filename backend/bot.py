@@ -1,11 +1,9 @@
 """
-JAC MOTORS ANGREN — Telegram Bot (Webhook version for Render)
+JAC MOTORS ANGREN — Telegram Bot (Webhook + Polling fallback)
 ===============================================================
-Использует webhook для приёма callback_query.
-Flask и Telegram работают в ОДНОМ процессе. Без polling, без threading.
 """
 
-import json, time, random, threading, signal, sys, os
+import json, time, random, threading, os, sys, asyncio
 from datetime import datetime
 from flask import Flask, request, jsonify
 from flask_cors import CORS
@@ -16,12 +14,9 @@ from telegram.ext import Application, CommandHandler, CallbackQueryHandler, Cont
 BOT_TOKEN = "8854046020:AAHtK4ZTZLDt5_TowHAUIXFVBmcuYNxZdE8"
 MANAGERS_FILE = "managers.json"
 AUTO_REJECT = 60
-RATE_MAX = 2
-RATE_WINDOW = 20 * 60
 
 # ================ STATE ================
-pending = {}     # lead_id -> {...}
-rate_ips = {}    # ip -> [timestamps]
+pending = {}
 manager_ids = []
 
 def load_mgr():
@@ -58,11 +53,10 @@ def msg_text(lead):
         f"🚗 <b>Модель:</b> {lead['model']}\n"
         f"💬 <b>Комментарий:</b> {lead.get('comment', '—')}\n"
         f"⏰ <b>Время:</b> {lead['time']}\n\n"
-        f"<i>Нажмите ✅ чтобы увидеть контакты\n"
-        f"У вас есть 1 минута</i>"
+        f"<i>Нажмите ✅ чтобы увидеть контакты\nУ вас есть 1 минута</i>"
     )
 
-def accepted_msg(lead):
+def accepted_msg_text(lead):
     return (
         f"✅ <b>ЗАЯВКА ПРИНЯТА</b>\n\n"
         f"👤 <b>Имя:</b> {lead['name']}\n"
@@ -76,11 +70,12 @@ def accepted_msg(lead):
 def send_to_random(lead_id):
     lead = pending.get(lead_id)
     if not lead or not manager_ids:
+        print(f"Cannot send lead {lead_id}: no lead or no managers")
         return
     available = [m for m in manager_ids if m not in lead.get('rejected_by', [])]
     if not available:
         pending.pop(lead_id, None)
-        print(f"All managers rejected lead {lead_id}")
+        print(f"All {len(manager_ids)} managers rejected lead {lead_id}")
         return
 
     mgr = random.choice(available)
@@ -95,9 +90,9 @@ def send_to_random(lead_id):
         )
         lead['message_id'] = msg.message_id
         lead['chat_id'] = mgr
-        print(f"Sent lead {lead_id} to manager {mgr}")
+        print(f"✅ Lead {lead_id} sent to manager {mgr}")
     except Exception as e:
-        print(f"Error sending to {mgr}: {e}")
+        print(f"❌ Send to {mgr} failed: {e}")
         lead.setdefault('rejected_by', []).append(mgr)
         send_to_random(lead_id)
 
@@ -112,7 +107,7 @@ def auto_reject(lead_id):
             bot.edit_message_text(
                 chat_id=mid,
                 message_id=lead['message_id'],
-                text=msg_text(lead) + "\n\n⏰ <b>Время истекло — передано другому</b>",
+                text=msg_text(lead) + "\n\n⏰ <b>Время истекло</b>",
                 parse_mode='HTML'
             )
         except:
@@ -154,33 +149,26 @@ async def callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
     mid = update.effective_user.id
     parts = data.split('_', 1)
     if len(parts) < 2:
-        await cb.answer()
-        return
+        await cb.answer(); return
     action, lead_id = parts[0], parts[1]
     lead = pending.get(lead_id)
 
     if not lead:
-        await cb.answer("Заявка уже неактивна")
-        return
+        await cb.answer("Заявка уже неактивна"); return
 
     if action == 'accept':
         lead['status'] = 'accepted'
-        await cb.edit_message_text(accepted_msg(lead), parse_mode='HTML')
+        await cb.edit_message_text(accepted_msg_text(lead), parse_mode='HTML')
         await cb.answer("✅ Принято!")
         pending.pop(lead_id, None)
-
     elif action == 'reject':
         lead.setdefault('rejected_by', []).append(mid)
         try:
-            await cb.edit_message_text(
-                msg_text(lead) + "\n\n❌ <b>Вы отказались — другой менеджер</b>",
-                parse_mode='HTML'
-            )
+            await cb.edit_message_text(msg_text(lead) + "\n\n❌ <b>Вы отказались — другой менеджер</b>", parse_mode='HTML')
         except:
             pass
         await cb.answer("Передано другому")
         send_to_random(lead_id)
-        # Restart timer for new manager
         threading.Thread(target=auto_reject, args=(lead_id,), daemon=True).start()
 
 telegram_app.add_handler(CommandHandler('start', start))
@@ -200,16 +188,7 @@ def submit():
     if not name or not phone:
         return jsonify({'ok': False, 'error': 'Имя и телефон обязательны'}), 400
 
-    ip = request.remote_addr or '0.0.0.0'
-    now = time.time()
-    # Rate limit disabled for testing
-    # rate_ips.setdefault(ip, [])
-    # rate_ips[ip] = [t for t in rate_ips[ip] if now - t < RATE_WINDOW]
-    # if len(rate_ips[ip]) >= RATE_MAX:
-    #     return jsonify({'ok': False, 'error': 'Лимит: 2 заявки за 20 минут'}), 429
-    # rate_ips[ip].append(now)
-
-    lid = f"lead_{int(now)}_{random.randint(1000,9999)}"
+    lid = f"lead_{int(time.time())}_{random.randint(1000,9999)}"
     lead = {
         'id': lid, 'name': name, 'phone': phone, 'model': model,
         'comment': comment, 'time': datetime.now().strftime('%d.%m.%Y %H:%M'),
@@ -224,11 +203,13 @@ def submit():
 
 @app.route('/webhook', methods=['POST'])
 def webhook():
-    """Telegram sends updates here. No polling needed."""
     try:
         data = request.get_json(force=True)
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
         update = Update.de_json(data, telegram_app.bot)
-        telegram_app.process_update(update)
+        loop.run_until_complete(telegram_app.process_update(update))
+        loop.close()
     except Exception as e:
         print(f"Webhook error: {e}")
     return 'ok', 200
@@ -236,10 +217,6 @@ def webhook():
 @app.route('/health')
 def health():
     return jsonify({'ok': True, 'managers': len(manager_ids), 'pending': len(pending), 'manager_ids': manager_ids})
-
-@app.route('/webhook/test', methods=['GET'])
-def webhook_test():
-    return jsonify({'webhook': 'endpoint alive', 'method': request.method})
 
 @app.route('/')
 def index():
@@ -249,8 +226,7 @@ def index():
 if __name__ == '__main__':
     print("=" * 60)
     print("🚀 JAC MOTORS ANGREN — Bot Backend (Webhook)")
-    print(f"📋 Managers: {len(manager_ids)}")
+    print(f"📋 Managers: {len(manager_ids)} — {manager_ids}")
     print("=" * 60)
-    # Always run Flask on port from env or 5000
     port = int(os.environ.get('PORT', 5000))
     app.run(host='0.0.0.0', port=port)
