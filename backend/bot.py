@@ -30,13 +30,21 @@ def save_mgr():
         json.dump({'manager_ids': manager_ids}, f)
 
 def fetch_managers_from_sheets():
-    """Download manager IDs from Google Sheets CSV"""
+    """Download manager IDs from Google Sheets CSV.
+    Format: column A = manager_id, column B = manager_name (optional)"""
     global manager_ids
     try:
         url = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSgam8czC85ktRCxfKNpyL_eV2E0rA96xSvYDNrcXD0CNJk-3X7qP0ISNQr0qRmPx5CctG0d6qeHaEN/pub?output=csv"
         with urllib.request.urlopen(url, timeout=10) as resp:
             csv_data = resp.read().decode('utf-8')
-        ids = [int(line.strip()) for line in csv_data.strip().split('\n')[1:] if line.strip().isdigit()]
+        ids = []
+        for line in csv_data.strip().split('\n')[1:]:
+            parts = line.strip().split(',')
+            col_a = parts[0].strip() if parts else ''
+            col_b = parts[1].strip() if len(parts) > 1 else ''
+            if col_a.isdigit():
+                ids.append(int(col_a))
+            name = col_b if col_b else f"ID:{col_a}"
         if ids:
             manager_ids = ids
             print(f"📋 Loaded {len(ids)} managers from Google Sheets")
