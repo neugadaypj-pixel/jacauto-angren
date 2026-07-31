@@ -25,6 +25,7 @@ def load_mgr():
     except: save_mgr()
 
 def save_mgr():
+    os.makedirs(os.path.dirname(os.path.abspath(MANAGERS_FILE)) or '.', exist_ok=True)
     with open(MANAGERS_FILE, 'w') as f:
         json.dump({'manager_ids': manager_ids}, f)
 
