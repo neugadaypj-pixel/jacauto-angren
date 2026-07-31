@@ -1,16 +1,25 @@
 with open('d:/jacauto-angren/index.html', 'r', encoding='utf-8') as f:
     c = f.read()
 
-# Fix 1: Replace favicon icon in header with the proper JAC text logo (Untitled-design-2.png = JAC wordmark)
-c = c.replace('cropped-Untitled_design__73_-removebg-preview-192x192.png', 'Untitled-design-2.png')
+# 1. Header logo → text "JAC MOTORS ANGREN"
+old_logo = '<a href="#" class="logo">\n    <img src="https://jacauto.uz/wp-content/uploads/2024/08/Untitled-design-2.png" alt="JAC" class="logo-dark">\n    <img src="https://jacauto.uz/wp-content/uploads/2024/08/Untitled-design-2.png" alt="JAC" class="logo-light">\n</a>'
+new_logo = '<a href="#" class="logo"><span class="logo-text-link">JAC<span class="logo-accent">MOTORS</span></span></a>'
+c = c.replace(old_logo, new_logo)
 
-# Fix 2: Remove preloader completely — just show a simple ring
-old_preloader = '<div class="preloader" id="preloader"><div class="loading-container"><div class="loading"></div><div id="loading-icon"><img src="https://jacauto.uz/wp-content/uploads/2024/08/tg_image_293401856-removebg-preview.png" alt="JAC" width="160"></div></div></div>'
-new_preloader = '<div class="preloader" id="preloader"><div class="loader-ring"></div></div>'
-c = c.replace(old_preloader, new_preloader)
+# 2. Preloader → ring + "JAC MOTORS"
+old_pre = '<div class="preloader" id="preloader"><div class="loader-ring"></div></div>'
+new_pre = '<div class="preloader" id="preloader"><div class="loader-ring"></div><div class="loader-logo">JAC MOTORS</div></div>'
+c = c.replace(old_pre, new_pre)
+
+# 3. Favicon → keep JAC icon
+old_fav = '''<link rel="icon" href="https://jacauto.uz/wp-content/uploads/2026/01/cropped-Untitled_design__73_-removebg-preview-32x32.png" sizes="32x32">
+    <link rel="icon" href="https://jacauto.uz/wp-content/uploads/2026/01/cropped-Untitled_design__73_-removebg-preview-192x192.png" sizes="192x192">
+    <link rel="apple-touch-icon" href="https://jacauto.uz/wp-content/uploads/2026/01/cropped-Untitled_design__73_-removebg-preview-180x180.png">
+'''
+new_fav = '<link rel="icon" href="https://jacauto.uz/wp-content/uploads/2026/01/cropped-Untitled_design__73_-removebg-preview-32x32.png" sizes="32x32">\n'
+c = c.replace(old_fav, new_fav)
 
 with open('d:/jacauto-angren/index.html', 'w', encoding='utf-8') as f:
     f.write(c)
 
-print('Header logo: JAC wordmark restored')
-print('Preloader: simplified to ring only')
+print('JAC MOTORS branding applied everywhere')
