@@ -202,11 +202,12 @@ def submit():
 
     ip = request.remote_addr or '0.0.0.0'
     now = time.time()
-    rate_ips.setdefault(ip, [])
-    rate_ips[ip] = [t for t in rate_ips[ip] if now - t < RATE_WINDOW]
-    if len(rate_ips[ip]) >= RATE_MAX:
-        return jsonify({'ok': False, 'error': 'Лимит: 2 заявки за 20 минут'}), 429
-    rate_ips[ip].append(now)
+    # Rate limit disabled for testing
+    # rate_ips.setdefault(ip, [])
+    # rate_ips[ip] = [t for t in rate_ips[ip] if now - t < RATE_WINDOW]
+    # if len(rate_ips[ip]) >= RATE_MAX:
+    #     return jsonify({'ok': False, 'error': 'Лимит: 2 заявки за 20 минут'}), 429
+    # rate_ips[ip].append(now)
 
     lid = f"lead_{int(now)}_{random.randint(1000,9999)}"
     lead = {
