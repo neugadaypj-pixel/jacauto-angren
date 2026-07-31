@@ -46,9 +46,12 @@ h1,h2,h3,h4{font-family:var(--font);color:var(--primary);line-height:1.2}
 .header{position:fixed;top:0;left:0;right:0;z-index:1000;padding:0;transition:0.4s var(--ease)}
 .header.scrolled{background:rgba(255,255,255,0.85);backdrop-filter:blur(20px) saturate(180%);box-shadow:0 1px 0 rgba(0,0,0,0.05)}
 .header-inner{display:flex;align-items:center;justify-content:space-between;padding:18px 0;max-width:1200px;margin:0 auto;padding-left:24px;padding-right:24px}
-.logo-text-link{font-size:18px;font-weight:800;color:rgba(255,255,255,0.9);letter-spacing:-0.5px;transition:color 0.4s var(--ease)}
-.logo-accent{color:var(--accent)}
-.header.scrolled .logo-text-link{color:var(--primary)}
+.logo{display:flex;align-items:center;position:relative}
+.logo img{height:28px;width:auto;max-width:150px;position:absolute;left:0;top:0}
+.logo-dark{filter:brightness(0) invert(1);position:relative}
+.logo-light{position:relative;display:none}
+.header.scrolled .logo-dark{display:none}
+.header.scrolled .logo-light{display:block}
 .nav-list{display:flex;gap:32px}
 .nav-link{color:rgba(255,255,255,0.75);font-size:14px;font-weight:500;transition:0.4s var(--ease);position:relative;padding:6px 0}
 .header.scrolled .nav-link{color:var(--gray-700)}
