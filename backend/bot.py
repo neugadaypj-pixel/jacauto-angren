@@ -1,6 +1,7 @@
 """
-JAC MOTORS ANGREN — Telegram Bot (FIXED)
-Uses asyncio.run() for polling, Flask in daemon thread.
+JAC MOTORS ANGREN — Telegram Bot
+Uses polling, Flask in daemon thread.
+All bot calls wrapped in asyncio.
 """
 
 import json, time, random, os, asyncio, threading
@@ -10,12 +11,10 @@ from flask_cors import CORS
 from telegram import Bot, InlineKeyboardButton, InlineKeyboardMarkup, Update
 from telegram.ext import Application, CommandHandler, CallbackQueryHandler, ContextTypes
 
-# ================ CONFIG ================
 BOT_TOKEN = "8854046020:AAHtK4ZTZLDt5_TowHAUIXFVBmcuYNxZdE8"
 MANAGERS_FILE = "managers.json"
 AUTO_REJECT = 60
 
-# ================ STATE ================
 pending = {}
 manager_ids = []
 
@@ -24,8 +23,7 @@ def load_mgr():
     try:
         with open(MANAGERS_FILE) as f:
             manager_ids = json.load(f).get('manager_ids', [])
-    except:
-        save_mgr()
+    except: save_mgr()
 
 def save_mgr():
     with open(MANAGERS_FILE, 'w') as f:
@@ -36,7 +34,6 @@ load_mgr()
 app = Flask(__name__)
 CORS(app)
 
-# ================ HELPERS ================
 def keyboard(lead_id):
     return InlineKeyboardMarkup([[
         InlineKeyboardButton("✅ Принять", callback_data=f"accept_{lead_id}"),
@@ -44,25 +41,21 @@ def keyboard(lead_id):
     ]])
 
 def msg_text(lead):
-    return (
-        f"🆕 <b>НОВАЯ ЗАЯВКА</b>\n\n"
-        f"🚗 <b>Модель:</b> {lead['model']}\n"
-        f"💬 <b>Комментарий:</b> {lead.get('comment', '—')}\n"
-        f"⏰ <b>Время:</b> {lead['time']}\n\n"
-        f"<i>Нажмите ✅ чтобы увидеть контакты\nУ вас есть 1 минута</i>"
-    )
+    return (f"🆕 <b>НОВАЯ ЗАЯВКА</b>\n\n"
+            f"🚗 <b>Модель:</b> {lead['model']}\n"
+            f"💬 <b>Комментарий:</b> {lead.get('comment', '—')}\n"
+            f"⏰ <b>Время:</b> {lead['time']}\n\n"
+            f"<i>Нажмите ✅ чтобы увидеть контакты\nУ вас есть 1 минута</i>")
 
 def accepted_msg_text(lead):
-    return (
-        f"✅ <b>ЗАЯВКА ПРИНЯТА</b>\n\n"
-        f"👤 <b>Имя:</b> {lead['name']}\n"
-        f"📞 <b>Телефон:</b> <code>{lead['phone']}</code>\n"
-        f"🚗 <b>Модель:</b> {lead['model']}\n"
-        f"💬 <b>Комментарий:</b> {lead.get('comment', '—')}\n\n"
-        f"<i>Свяжитесь с клиентом!</i>"
-    )
+    return (f"✅ <b>ЗАЯВКА ПРИНЯТА</b>\n\n"
+            f"👤 <b>Имя:</b> {lead['name']}\n"
+            f"📞 <b>Телефон:</b> <code>{lead['phone']}</code>\n"
+            f"🚗 <b>Модель:</b> {lead['model']}\n"
+            f"💬 <b>Комментарий:</b> {lead.get('comment', '—')}\n\n"
+            f"<i>Свяжитесь с клиентом!</i>")
 
-# ================ BOT ================
+# ================ BOT HANDLERS ================
 bot = Bot(token=BOT_TOKEN)
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -70,7 +63,22 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if uid not in manager_ids:
         manager_ids.append(uid)
         save_mgr()
-    await update.message.reply_text(f"✅ Вы — менеджер JAC MOTORS ANGREN!\nID: <code>{uid}</code>", parse_mode='HTML')
+    await update.message.reply_text(f"✅ Вы — менеджер JAC MOTORS ANGREN!\nID: <code>{uid}</code>\n/managers — список\n/remove — удалить", parse_mode='HTML')
+
+async def managers_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    if manager_ids:
+        await update.message.reply_text("📋 " + "\n".join(f"• <code>{m}</code>" for m in manager_ids), parse_mode='HTML')
+    else:
+        await update.message.reply_text("Нет менеджеров.")
+
+async def remove_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    uid = update.effective_user.id
+    if uid in manager_ids:
+        manager_ids.remove(uid)
+        save_mgr()
+        await update.message.reply_text("Удалены.")
+    else:
+        await update.message.reply_text("Вас нет в списке.")
 
 async def callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
     cb = update.callback_query
@@ -89,21 +97,22 @@ async def callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
         pending.pop(lead_id, None)
     elif action == 'reject':
         lead.setdefault('rejected_by', []).append(mid)
-        try:
-            await cb.edit_message_text(msg_text(lead) + "\n\n❌ <b>Отказано — другой менеджер</b>", parse_mode='HTML')
+        try: await cb.edit_message_text(msg_text(lead) + "\n\n❌ <b>Отказано — другой менеджер</b>", parse_mode='HTML')
         except: pass
         await cb.answer("Передано")
-        send_to_random_sync(lead_id)
+        send_sync(lead_id)
         threading.Thread(target=auto_reject, args=(lead_id,), daemon=True).start()
 
 def build_app():
     app_tg = Application.builder().token(BOT_TOKEN).build()
     app_tg.add_handler(CommandHandler('start', start))
+    app_tg.add_handler(CommandHandler('managers', managers_cmd))
+    app_tg.add_handler(CommandHandler('remove', remove_cmd))
     app_tg.add_handler(CallbackQueryHandler(callback))
     return app_tg
 
-# ================ ROUTING ================
-def send_to_random_sync(lead_id):
+# ================ ROUTING (sync wrappers) ================
+def send_sync(lead_id):
     lead = pending.get(lead_id)
     if not lead or not manager_ids: return
     available = [m for m in manager_ids if m not in lead.get('rejected_by', [])]
@@ -119,7 +128,7 @@ def send_to_random_sync(lead_id):
     except Exception as e:
         print(f"Send error: {e}")
         lead.setdefault('rejected_by', []).append(mgr)
-        send_to_random_sync(lead_id)
+        send_sync(lead_id)
 
 def auto_reject(lead_id):
     time.sleep(AUTO_REJECT)
@@ -134,7 +143,7 @@ def auto_reject(lead_id):
             loop.close()
         except: pass
         lead.setdefault('rejected_by', []).append(mid)
-    send_to_random_sync(lead_id)
+    send_sync(lead_id)
 
 # ================ FLASK ================
 @app.route('/api/submit', methods=['POST'])
@@ -151,7 +160,7 @@ def submit():
             'time': datetime.now().strftime('%d.%m.%Y %H:%M'),
             'status': 'pending', 'rejected_by': [], 'current_manager': None, 'message_id': None}
     pending[lid] = lead
-    send_to_random_sync(lid)
+    send_sync(lid)
     threading.Thread(target=auto_reject, args=(lid,), daemon=True).start()
     return jsonify({'ok': True, 'message': 'Заявка отправлена!'})
 
@@ -163,14 +172,10 @@ def health():
 def index():
     return jsonify({'service': 'JAC MOTORS ANGREN Bot API'})
 
-# ================ MAIN ================
 if __name__ == '__main__':
-    print(f"🚀 Starting... Managers: {manager_ids}")
-    # Run Flask in daemon thread
+    print(f"🚀 Managers: {manager_ids}")
     port = int(os.environ.get('PORT', 5000))
     threading.Thread(target=lambda: app.run(host='0.0.0.0', port=port, use_reloader=False), daemon=True).start()
     time.sleep(2)
-    # Run Telegram polling in main thread (this works on Python 3.14)
     app_tg = build_app()
-    print("🤖 Polling started...")
     app_tg.run_polling()
