@@ -8,22 +8,22 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
     <style>
-        .car-page{min-height:100vh;background:var(--gray-50)}
         .cp-hero{background:var(--dark);padding:120px 24px 60px;text-align:center}
         .cp-hero h1{color:var(--white);font-size:clamp(32px,5vw,56px);font-weight:700;margin-bottom:8px}
-        .cp-hero .cp-tag{color:var(--accent);font-size:14px;font-weight:600}
-        .cp-back{display:inline-flex;align-items:center;gap:8px;color:rgba(255,255,255,0.5);font-size:14px;margin-bottom:24px;transition:0.3s}
+        .cp-hero .cp-tag{color:var(--accent);font-size:18px;font-weight:600;margin-bottom:8px}
+        .cp-hero .cp-price{color:rgba(255,255,255,0.7);font-size:24px;font-weight:700}
+        .cp-back{display:inline-flex;align-items:center;gap:8px;color:rgba(255,255,255,0.5);font-size:14px;margin-bottom:20px;transition:0.3s}
         .cp-back:hover{color:var(--accent)}
         .cp-content{max-width:800px;margin:-40px auto 60px;padding:0 24px}
-        .cp-card{background:var(--white);border-radius:var(--radius-xl);padding:40px;box-shadow:var(--shadow-lg)}
+        .cp-card{background:var(--white);border-radius:24px;padding:40px;box-shadow:0 8px 40px rgba(0,0,0,0.08)}
         .cp-card h2{font-size:24px;font-weight:700;margin-bottom:16px}
         .cp-card p{color:var(--gray-700);font-size:15px;line-height:1.7;margin-bottom:32px}
-        .cp-specs{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+        .cp-specs{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:32px}
         .cp-spec{background:var(--gray-50);padding:16px 20px;border-radius:12px;display:flex;justify-content:space-between;align-items:center}
         .cp-spec .spec-label{color:var(--gray-500);font-size:14px}
         .cp-spec .spec-value{font-weight:700;color:var(--primary);font-size:15px}
-        .cp-cta{text-align:center;margin-top:32px}
-        .cp-placeholder{width:100%;aspect-ratio:16/9;background:var(--gray-900);border-radius:var(--radius-lg);display:flex;align-items:center;justify-content:center;margin-bottom:32px}
+        .cp-cta{text-align:center}
+        .cp-placeholder{width:100%;aspect-ratio:16/9;background:var(--gray-900);border-radius:16px;display:flex;align-items:center;justify-content:center;margin-bottom:32px}
         .cp-placeholder i{font-size:80px;color:rgba(255,255,255,0.1)}
     </style>
 </head>
@@ -42,9 +42,10 @@
 </div></header>
 
 <section class="car-page"><div class="cp-hero">
-    <a href="index.html#models" class="cp-back"><i class="fas fa-arrow-left"></i> Назад к моделям</a>
+    <a href="index.html#models" class="cp-back"><i class="fas fa-arrow-left"></i> Все модели</a>
     <h1 id="carName">JAC JS8</h1>
-    <div class="cp-tag" id="carTag">Премиальный кроссовер</div>
+    <div class="cp-tag" id="carTag">Кроссовер</div>
+    <div class="cp-price" id="carPrice">313 650 000 сум</div>
 </div>
 <div class="cp-content"><div class="cp-card">
     <div class="cp-placeholder"><i class="fas fa-car" id="carIcon"></i></div>
@@ -56,20 +57,28 @@
 
 <footer class="footer"><div class="container">
     <div class="footer-grid">
-        <div class="footer-col footer-brand"><img src="https://jacauto.uz/wp-content/uploads/2024/08/Untitled-design-2.png" alt="JAC" style="height:32px;margin-bottom:12px;filter:brightness(0)invert(1)"><p>Официальный дистрибьютор JAC в Узбекистане.</p></div>
-        <div class="footer-col"><h4>Модели</h4><ul><li><a href="car.html?model=js8">JAC JS8</a></li><li><a href="car.html?model=js6">JAC JS6</a></li><li><a href="car.html?model=j7">JAC J7</a></li><li><a href="car.html?model=q7">JAC Q7</a></li><li><a href="car.html?model=x200">JAC X200</a></li></ul></div>
+        <div class="footer-col"><img src="https://jacauto.uz/wp-content/uploads/2024/08/Untitled-design-2.png" alt="JAC" style="height:32px;margin-bottom:12px;filter:brightness(0)invert(1)"><p>Официальный дистрибьютор JAC в Узбекистане.</p></div>
+        <div class="footer-col"><h4>Модели</h4><ul><li><a href="car.html?model=js8">JAC JS8</a></li><li><a href="car.html?model=t8">JAC T8</a></li><li><a href="car.html?model=t9">JAC T9</a></li><li><a href="car.html?model=j7">JAC J7</a></li><li><a href="car.html?model=rf8">JAC RF8</a></li></ul></div>
+        <div class="footer-col"><h4>Контакты</h4><ul class="footer-contacts"><li><i class="fas fa-phone-alt"></i> 71 200 77 11</li><li><i class="fas fa-envelope"></i> jacmotorsangren@gmail.com</li></ul></div>
     </div>
     <div class="footer-bottom"><p>&copy; 2026 JAC MOTORS ANGREN</p></div>
 </div></footer>
 
 <script>
 const cars = {
-    js8: {name:'JAC JS8',tag:'Премиальный кроссовер',icon:'fa-car',desc:'JAC JS8 — флагманский кроссовер с просторным салоном и передовыми технологиями. Мощный 2.0L турбодвигатель (190 л.с.), полный привод и богатое оснащение делают его идеальным выбором для города и трассы. Стильный дизайн, панорамная крыша, кожаный салон и продвинутые системы безопасности.'},
-    js6: {name:'JAC JS6',tag:'Городской кроссовер',icon:'fa-car',desc:'JAC JS6 — компактный и стильный кроссовер для города. Экономичный 1.5L турбомотор (150 л.с.), современный дизайн и продуманный салон для комфортных ежедневных поездок. Мультимедиа, камера заднего вида и климат-контроль в стандартной комплектации.'},
-    j7: {name:'JAC J7',tag:'Бизнес-седан',icon:'fa-car',desc:'JAC J7 — элегантный седан для бизнеса и личного пользования. Премиальный интерьер с натуральной кожей, просторный задний ряд и уверенная динамика (1.5L Turbo, 150 л.с.) для статусных поездок. Бесключевой доступ, адаптивный круиз-контроль.'},
-    q7: {name:'JAC Q7',tag:'Семейный кроссовер',icon:'fa-car',desc:'JAC Q7 — просторный 7-местный кроссовер для большой семьи. Третий ряд сидений, мощный 2.0L турбодвигатель (190 л.с.) и полный привод для уверенности на любой дороге. Панорамная крыша, трёхзонный климат-контроль.'},
-    x200: {name:'JAC X200',tag:'Коммерческий фургон',icon:'fa-truck',desc:'JAC X200 — надёжный коммерческий автомобиль для вашего бизнеса. Дизельный 2.8L двигатель (120 л.с.), высокая грузоподъёмность до 5 тонн и низкий расход топлива. Идеален для перевозок, логистики и строительства.'},
-    m3: {name:'JAC M3 Van',tag:'Грузопассажирский',icon:'fa-truck',desc:'JAC M3 Van — универсальный грузопассажирский фургон на 7 мест. Просторный салон-трансформер, экономичный 1.6L двигатель (113 л.с.) и надёжная конструкция. Подходит для семьи, бизнеса и корпоративных поездок.'}
+    js8:   {name:"JAC JS8",  tag:"Премиальный кроссовер", price:"313 650 000 сум", icon:"fa-car", desc:"JAC JS8 — флагманский кроссовер с просторным салоном и передовыми технологиями. Мощный 2.0L турбодвигатель, полный привод и богатое оснащение делают его идеальным выбором для города и трассы. Панорамная крыша, кожаный салон, продвинутые системы безопасности.",           specs:[["Двигатель","2.0L Turbo"],["Мощность","190 л.с."],["Коробка передач","Автомат 7-ст."],["Привод","Полный"],["Разгон 0-100","8.5 сек"],["Расход топлива","8.2 л/100км"],["Дорожный просвет","190 мм"],["Объём багажника","500 л"]]},
+    t8:    {name:"JAC T8",   tag:"Внедорожник",            price:"330 330 000 сум", icon:"fa-car", desc:"JAC T8 — мощный рамный внедорожник для настоящих приключений. Дизельный двигатель, полный привод и внушительный дорожный просвет для уверенности на любом бездорожье.",                                             specs:[["Двигатель","2.0L Turbo Diesel"],["Мощность","170 л.с."],["Коробка передач","Автомат 8-ст."],["Привод","Полный"],["Разгон 0-100","10.5 сек"],["Расход топлива","9.0 л/100км"],["Дорожный просвет","220 мм"],["Грузоподъёмность","900 кг"]]},
+    t9:    {name:"JAC T9",   tag:"Пикап премиум",          price:"419 265 000 сум", icon:"fa-truck", desc:"JAC T9 — премиальный пикап для бизнеса и активного отдыха. Просторная грузовая платформа, мощный дизель и комфортабельный салон — универсальное решение для работы и путешествий.",                                             specs:[["Двигатель","2.0L Turbo Diesel"],["Мощность","190 л.с."],["Коробка передач","Автомат 8-ст."],["Привод","Полный"],["Разгон 0-100","9.5 сек"],["Расход топлива","8.8 л/100км"],["Грузовая платформа","1520x1520 мм"],["Грузоподъёмность","1000 кг"]]},
+    j7:    {name:"JAC J7",   tag:"Бизнес-седан",           price:"235 000 000 сум", icon:"fa-car", desc:"JAC J7 — элегантный седан для бизнеса и личного пользования. Премиальный интерьер, просторный задний ряд и уверенная динамика для статусных поездок. Бесключевой доступ и адаптивный круиз-контроль.",                                     specs:[["Двигатель","1.5L Turbo"],["Мощность","150 л.с."],["Коробка передач","Автомат"],["Привод","Передний"],["Разгон 0-100","9.2 сек"],["Расход топлива","6.5 л/100км"],["Дорожный просвет","155 мм"],["Объём багажника","480 л"]]},
+    rf8:   {name:"JAC RF8",  tag:"Минивэн премиум",        price:"444 675 000 сум", icon:"fa-truck", desc:"JAC RF8 — премиальный минивэн для семьи и бизнес-поездок. Просторный салон на 7 мест, мощный двигатель и богатое оснащение для максимального комфорта пассажиров.",                                                     specs:[["Двигатель","2.0L Turbo"],["Мощность","224 л.с."],["Коробка передач","Автомат 8-ст."],["Привод","Передний"],["Количество мест","7"],["Расход топлива","8.5 л/100км"],["Дорожный просвет","170 мм"],["Объём багажника","550 л"]]},
+    x200b: {name:"JAC X200 Бортовой", tag:"Коммерческий",   price:"248 640 000 сум", icon:"fa-truck", desc:"JAC X200 Бортовой — надёжный коммерческий автомобиль для перевозки грузов. Дизельный двигатель, высокая грузоподъёмность и экономичность для ежедневной работы. Идеален для строительства, логистики и сельского хозяйства.", specs:[["Двигатель","2.8L Diesel"],["Мощность","120 л.с."],["Коробка передач","Механика 5-ст."],["Привод","Задний"],["Грузоподъёмность","5 тонн"],["Расход топлива","9.5 л/100км"],["Колёсная база","3300 мм"],["Тип кузова","Бортовой"]]},
+    x200t: {name:"JAC X200 Тентовка", tag:"Коммерческий",   price:"255 360 000 сум", icon:"fa-truck", desc:"JAC X200 Тентовка — универсальный коммерческий автомобиль с тентованным кузовом. Защита груза от погодных условий, лёгкий доступ и высокая манёвренность для городских перевозок.",                                   specs:[["Двигатель","2.8L Diesel"],["Мощность","120 л.с."],["Коробка передач","Механика 5-ст."],["Привод","Задний"],["Грузоподъёмность","5 тонн"],["Расход топлива","9.5 л/100км"],["Колёсная база","3300 мм"],["Тип кузова","Тентовка"]]},
+    x200p: {name:"JAC X200 Промтоварный",tag:"Коммерческий",price:"275 520 000 сум", icon:"fa-truck", desc:"JAC X200 Промтоварный — специализированный коммерческий автомобиль для перевозки промышленных товаров. Усиленная конструкция кузова, дизельный двигатель и надёжность для интенсивной эксплуатации.",                   specs:[["Двигатель","2.8L Diesel"],["Мощность","120 л.с."],["Коробка передач","Механика 5-ст."],["Привод","Задний"],["Грузоподъёмность","5 тонн"],["Расход топлива","9.5 л/100км"],["Колёсная база","3300 мм"],["Тип кузова","Промтоварный"]]},
+    m3:    {name:"JAC M3 Van",tag:"Грузопассажирский",      price:"209 034 000 сум", icon:"fa-truck", desc:"JAC M3 Van — универсальный грузопассажирский фургон на 7 мест. Просторный салон-трансформер, экономичный двигатель и надёжная конструкция. Подходит для семьи, бизнеса и корпоративных поездок.",                          specs:[["Двигатель","1.6L"],["Мощность","113 л.с."],["Коробка передач","Механика 5-ст."],["Привод","Передний"],["Количество мест","7"],["Расход топлива","7.8 л/100км"],["Дорожный просвет","170 мм"],["Габариты","5075x1765 мм"]]},
+    m3l:   {name:"JAC M3 Luxe",tag:"Грузопассажирский",     price:"226 233 000 сум", icon:"fa-truck", desc:"JAC M3 Luxe — улучшенная версия популярного грузопассажирского фургона. Более богатое оснащение, улучшенная шумоизоляция и комфортабельный салон. Идеален для семейных поездок и представительских целей.",                   specs:[["Двигатель","1.6L"],["Мощность","113 л.с."],["Коробка передач","Механика 5-ст."],["Привод","Передний"],["Количество мест","7"],["Расход топлива","7.8 л/100км"],["Кондиционер","Да"],["Отделка салона","Премиум"]]},
+    m4:    {name:"JAC M4 REFINE",tag:"Минивэн",              price:"255 339 000 сум", icon:"fa-truck", desc:"JAC M4 REFINE — комфортабельный минивэн для деловых и семейных поездок. Просторный салон, современный дизайн и экономичный двигатель. Отличный выбор для тех, кто ценит комфорт и практичность.",                          specs:[["Двигатель","2.0L"],["Мощность","136 л.с."],["Коробка передач","Механика 5-ст."],["Привод","Задний"],["Количество мест","7"],["Расход топлива","9.0 л/100км"],["Клиренс","170 мм"],["Объём багажника","600 л"]]},
+    sunrayv:{name:"SUNRAY Van",tag:"Микроавтобус",           price:"383 670 000 сум", icon:"fa-truck", desc:"SUNRAY Van — просторный микроавтобус для пассажирских и грузовых перевозок. Надёжный дизельный двигатель, вместительный салон и экономичность. Идеален для туризма, трансфера и корпоративных перевозок.",               specs:[["Двигатель","2.8L Diesel"],["Мощность","150 л.с."],["Коробка передач","Механика 6-ст."],["Привод","Задний"],["Количество мест","15"],["Расход топлива","10.5 л/100км"],["Длина кузова","5.9 м"],["Высота салона","1.7 м"]]},
+    sunrayb:{name:"SUNRAY Bus",tag:"Автобус",                price:"416 745 000 сум", icon:"fa-truck", desc:"SUNRAY Bus — комфортабельный автобус для пассажирских перевозок. Просторный салон, мягкие сиденья и мощный двигатель. Отличное решение для междугородних маршрутов, трансфера и корпоративных выездов.",                     specs:[["Двигатель","2.8L Diesel"],["Мощность","150 л.с."],["Коробка передач","Механика 6-ст."],["Привод","Задний"],["Количество мест","19"],["Расход топлива","11.0 л/100км"],["Длина кузова","6.5 м"],["Кондиционер","Да"]]}
 };
 
 const model = new URLSearchParams(location.search).get('model') || 'js8';
@@ -77,9 +86,15 @@ const c = cars[model] || cars['js8'];
 
 document.getElementById('carName').textContent = c.name;
 document.getElementById('carTag').textContent = c.tag;
+document.getElementById('carPrice').textContent = c.price;
 document.getElementById('carDesc').textContent = c.desc;
-document.getElementById('carIcon').className = 'fas ' + c.icon;
+document.getElementById('carIcon').className = 'fas ' + (c.icon || 'fa-car');
 document.title = c.name + ' — JAC MOTORS ANGREN';
+
+const specsEl = document.getElementById('carSpecs');
+c.specs.forEach(s => {
+    specsEl.innerHTML += '<div class="cp-spec"><span class="spec-label">' + s[0] + '</span><span class="spec-value">' + s[1] + '</span></div>';
+});
 </script>
 </body>
 </html>

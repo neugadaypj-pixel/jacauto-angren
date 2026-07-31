@@ -14,14 +14,7 @@ models = [
     ("commercial", "SUNRAY BUS", "416 745 000 сум", "sunrayb"),
 ]
 
-html = []
 for cat, name, price, slug in models:
     icon = "fa-truck" if cat == "commercial" else "fa-car"
-    html.append(f'<div class="model-card" data-cat="{cat}"><div class="model-img"><div class="model-placeholder"><i class="fas {icon}"></i></div></div><div class="model-info"><h3>{name}</h3><p>{price}</p><a href="tel:+998712007711" class="model-link">Узнать больше <i class="fas fa-arrow-right"></i></a></div></div>')
-
-cards = "\n".join(html)
-
-print(f"GENERATED {len(models)} CARDS")
-print("----COPY BELOW THIS LINE INTO index.html REPLACING LINES 60-67----")
-print(cards)
-print("----COPY ABOVE THIS LINE----")
+    link = f"car.html?model={slug}"
+    print(f"<div class=\"model-card\" data-cat=\"{cat}\"><div class=\"model-img\"><div class=\"model-placeholder\"><i class=\"fas {icon}\"></i></div></div><div class=\"model-info\"><h3>{name}</h3><p>{price}</p><a href=\"{link}\" class=\"model-link\">Подробнее <i class=\"fas fa-arrow-right\"></i></a></div></div>")
