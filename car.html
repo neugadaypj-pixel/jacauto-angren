@@ -48,7 +48,8 @@
     <div class="cp-price" id="carPrice">313 650 000 сум</div>
 </div>
 <div class="cp-content"><div class="cp-card">
-    <div class="cp-placeholder"><i class="fas fa-car" id="carIcon"></i></div>
+    <img id="carImage" src="" alt="" style="width:100%;border-radius:16px;margin-bottom:32px;display:none">
+    <div class="cp-placeholder" id="cpPlaceholder"><i class="fas fa-car" id="carIcon"></i></div>
     <h2>Характеристики</h2>
     <p id="carDesc">Загрузка...</p>
     <div class="cp-specs" id="carSpecs"></div>
@@ -94,6 +95,13 @@ document.getElementById('carTag').textContent = c.tag;
 document.getElementById('carPrice').textContent = c.price;
 document.getElementById('carDesc').textContent = c.desc;
 document.getElementById('carIcon').className = 'fas ' + (c.icon || 'fa-car');
+// Check if car image exists
+var imgPath = 'images/cars/' + model + '.webp';
+var imgEl = document.getElementById('carImage');
+var placeholder = document.getElementById('cpPlaceholder');
+imgEl.onerror = function(){ imgEl.style.display='none'; placeholder.style.display='flex'; };
+imgEl.onload = function(){ imgEl.style.display='block'; placeholder.style.display='none'; };
+imgEl.src = imgPath;
 document.title = c.name + ' — JAC MOTORS ANGREN';
 
 const specsEl = document.getElementById('carSpecs');
