@@ -1,12 +1,16 @@
-with open('d:/jacauto-angren/index.html', 'r', encoding='utf-8') as f:
-    c = f.read()
+import shutil, os
 
-# Replace favicon with local jac-motors-logo.png
-old = '<link rel="icon" href="https://jacmotors.uz/logo-nav.png" sizes="32x32"><link rel="apple-touch-icon" href="https://jacmotors.uz/logo-nav.png">'
-new = '<link rel="icon" href="jac-motors-logo.png" sizes="32x32"><link rel="apple-touch-icon" href="jac-motors-logo.png">'
-c = c.replace(old, new)
-
-with open('d:/jacauto-angren/index.html', 'w', encoding='utf-8') as f:
-    f.write(c)
-
-print('Favicon: jac-motors-logo.png')
+for filename in ['car.html']:
+    path = os.path.join('d:/jacauto-angren', filename)
+    with open(path, 'r', encoding='utf-8') as f:
+        c = f.read()
+    
+    # Replace old logo URL with local logo
+    count1 = c.count('Untitled-design-2.png')
+    c = c.replace('https://jacauto.uz/wp-content/uploads/2024/08/Untitled-design-2.png', 'logo-nav.webp')
+    count2 = c.count('logo-nav.webp')
+    
+    with open(path, 'w', encoding='utf-8') as f:
+        f.write(c)
+    
+    print(f'{filename}: logo replaced ({count1} -> {count2})')
