@@ -1,9 +1,9 @@
 """
 JAC MOTORS ANGREN — Telegram Bot FINAL
-Polling + Flask. All async wrapped. Debug logging for routing.
+Polling + Flask. Managers from Google Sheets.
 """
 
-import json, time, random, os, asyncio, threading
+import json, time, random, os, asyncio, threading, urllib.request
 from datetime import datetime
 from flask import Flask, request, jsonify
 from flask_cors import CORS
@@ -29,7 +29,23 @@ def save_mgr():
     with open(MANAGERS_FILE, 'w') as f:
         json.dump({'manager_ids': manager_ids}, f)
 
-load_mgr()
+def fetch_managers_from_sheets():
+    """Download manager IDs from Google Sheets CSV"""
+    global manager_ids
+    try:
+        url = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSgam8czC85ktRCxfKNpyL_eV2E0rA96xSvYDNrcXD0CNJk-3X7qP0ISNQr0qRmPx5CctG0d6qeHaEN/pub?output=csv"
+        with urllib.request.urlopen(url, timeout=10) as resp:
+            csv_data = resp.read().decode('utf-8')
+        ids = [int(line.strip()) for line in csv_data.strip().split('\n')[1:] if line.strip().isdigit()]
+        if ids:
+            manager_ids = ids
+            print(f"📋 Loaded {len(ids)} managers from Google Sheets")
+            return True
+    except Exception as e:
+        print(f"⚠ Sheets fetch failed: {e}")
+    return False
+
+fetch_managers_from_sheets()
 
 app = Flask(__name__)
 CORS(app)
