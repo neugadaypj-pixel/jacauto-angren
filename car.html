@@ -73,6 +73,16 @@
     </style>
 </head>
 <body>
+<div class="preloader" id="preloader">
+    <div class="preloader-content">
+        <div class="preloader-logo-wrap">
+            <img src="logo-nav.webp" alt="JAC MOTORS" class="preloader-logo">
+            <div class="preloader-ring"></div>
+        </div>
+        <div class="preloader-bar"><div class="preloader-bar-fill"></div></div>
+        <span class="preloader-brand">JAC MOTORS <em>ANGREN</em></span>
+    </div>
+</div>
 
 <header class="header scrolled" id="header"><div class="container header-inner">
     <a href="index.html" class="logo"><img src="logo-nav.webp" alt="JAC MOTORS ANGREN" class="logo-light"></a>
@@ -116,6 +126,16 @@
 </div></footer>
 
 <script>
+/* --- Preloader --- */
+(function(){
+    var p = document.getElementById('preloader');
+    if (!p) return;
+    window.addEventListener('load', function(){
+        setTimeout(function(){ p.classList.add('hidden'); }, 600);
+        setTimeout(function(){ if(p) p.remove(); }, 1200);
+    });
+})();
+
 /* --- Mobile menu --- */
 (function(){
     var hamburger = document.getElementById('hamburger');

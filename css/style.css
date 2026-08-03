@@ -34,9 +34,20 @@ h1,h2,h3,h4{font-family:var(--font);color:var(--primary);line-height:1.2}
 
 /* Preloader */
 .preloader{position:fixed;inset:0;z-index:99999;background:var(--dark);display:flex;align-items:center;justify-content:center}
-.preloader.hidden{opacity:0;visibility:hidden;transition:opacity 0.4s ease,visibility 0.4s ease}
-.loader-ring{width:48px;height:48px;border:3px solid rgba(255,255,255,0.1);border-top-color:var(--accent);border-radius:50%;animation:spin 0.8s linear infinite}
-@keyframes spin{to{transform:rotate(360deg)}}
+.preloader.hidden{opacity:0;visibility:hidden;transition:opacity 0.5s ease,visibility 0.5s}
+.preloader-content{display:flex;flex-direction:column;align-items:center;gap:24px}
+.preloader-logo-wrap{position:relative;width:100px;height:100px;display:flex;align-items:center;justify-content:center}
+.preloader-logo{width:64px;height:auto;position:relative;z-index:2;animation:preloaderPulse 2s ease-in-out infinite;filter:brightness(0) invert(1)}
+.preloader-ring{position:absolute;inset:0;border-radius:50%;border:2px solid transparent;border-top-color:var(--accent);border-right-color:rgba(224,49,26,0.4);animation:preloaderSpin 1.2s linear infinite;filter:drop-shadow(0 0 12px rgba(224,49,26,0.3))}
+.preloader-ring::after{content:'';position:absolute;inset:6px;border-radius:50%;border:1px solid rgba(255,255,255,0.06)}
+.preloader-bar{width:160px;height:2px;background:rgba(255,255,255,0.08);border-radius:2px;overflow:hidden}
+.preloader-bar-fill{height:100%;width:0;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:2px;animation:preloaderBar 1.8s var(--ease) infinite}
+.preloader-brand{color:rgba(255,255,255,0.3);font-size:11px;font-weight:600;letter-spacing:4px;text-transform:uppercase;animation:preloaderFade 2s ease-in-out infinite}
+.preloader-brand em{font-style:normal;color:var(--accent)}
+@keyframes preloaderSpin{to{transform:rotate(360deg)}}
+@keyframes preloaderPulse{0%,100%{opacity:0.7;transform:scale(0.96)}50%{opacity:1;transform:scale(1.04)}}
+@keyframes preloaderBar{0%{width:0;margin-left:0}50%{width:60%;margin-left:0}100%{width:0;margin-left:100%}}
+@keyframes preloaderFade{0%,100%{opacity:0.3}50%{opacity:0.6}}
 
 /* Header */
 .header{position:fixed;top:0;left:0;right:0;z-index:1000;padding:0;transition:0.4s var(--ease)}
