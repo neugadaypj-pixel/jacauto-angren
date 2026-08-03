@@ -43,7 +43,6 @@ h1,h2,h3,h4{font-family:var(--font);color:var(--primary);line-height:1.2}
 .preloader-bar{width:160px;height:2px;background:rgba(255,255,255,0.08);border-radius:2px;overflow:hidden}
 .preloader-bar-fill{height:100%;width:0;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:2px;animation:preloaderBar 1.8s var(--ease) infinite}
 .preloader-brand{color:rgba(255,255,255,0.3);font-size:11px;font-weight:600;letter-spacing:4px;text-transform:uppercase;animation:preloaderFade 2s ease-in-out infinite}
-.preloader-brand em{font-style:normal;color:var(--accent)}
 @keyframes preloaderSpin{to{transform:rotate(360deg)}}
 @keyframes preloaderPulse{0%,100%{opacity:0.7;transform:scale(0.96)}50%{opacity:1;transform:scale(1.04)}}
 @keyframes preloaderBar{0%{width:0;margin-left:0}50%{width:60%;margin-left:0}100%{width:0;margin-left:100%}}
