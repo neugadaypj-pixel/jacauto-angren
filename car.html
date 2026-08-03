@@ -12,25 +12,70 @@
         .cp-hero h1{color:var(--white);font-size:clamp(32px,5vw,56px);font-weight:700;margin-bottom:8px}
         .cp-hero .cp-tag{color:var(--accent);font-size:18px;font-weight:600;margin-bottom:8px}
         .cp-hero .cp-price{color:rgba(255,255,255,0.7);font-size:24px;font-weight:700}
-        .cp-back{display:inline-flex;align-items:center;gap:8px;color:rgba(255,255,255,0.5);font-size:14px;margin-bottom:20px;transition:0.3s}
+        .cp-back{display:inline-flex;align-items:center;gap:8px;color:rgba(255,255,255,0.5);font-size:14px;margin-bottom:20px;transition:0.3s;min-height:44px}
         .cp-back:hover{color:var(--accent)}
         .cp-content{max-width:800px;margin:-40px auto 60px;padding:0 24px}
         .cp-card{background:var(--white);border-radius:24px;padding:40px;box-shadow:0 8px 40px rgba(0,0,0,0.08)}
         .cp-card h2{font-size:24px;font-weight:700;margin-bottom:16px}
         .cp-card p{color:var(--gray-700);font-size:15px;line-height:1.7;margin-bottom:32px}
         .cp-specs{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:32px}
-        .cp-spec{background:var(--gray-50);padding:16px 20px;border-radius:12px;display:flex;justify-content:space-between;align-items:center}
+        .cp-spec{background:var(--gray-50);padding:16px 20px;border-radius:12px;display:flex;justify-content:space-between;align-items:center;min-height:44px}
         .cp-spec .spec-label{color:var(--gray-500);font-size:14px}
         .cp-spec .spec-value{font-weight:700;color:var(--primary);font-size:15px}
         .cp-cta{text-align:center}
-        .cp-placeholder{width:100%;aspect-ratio:16/9;background:var(--gray-900);border-radius:16px;display:flex;align-items:center;justify-content:center;margin-bottom:32px}
+        .cp-placeholder{width:100%;aspect-ratio:16/9;max-height:420px;background:var(--gray-900);border-radius:16px;display:flex;align-items:center;justify-content:center;margin-bottom:32px}
         .cp-placeholder i{font-size:80px;color:rgba(255,255,255,0.1)}
+        .cp-card img[style*="display:block"]{max-height:420px;object-fit:contain;background:var(--gray-900)}
+        @media(max-width:1024px){
+            .cp-hero{padding:100px 20px 50px}
+            .cp-hero h1{font-size:clamp(28px,4.5vw,48px)}
+            .cp-hero .cp-price{font-size:22px}
+            .cp-content{margin:-30px auto 50px;padding:0 20px}
+            .cp-card{padding:32px}
+            .cp-specs{grid-template-columns:1fr 1fr;gap:10px}
+            .cp-placeholder i{font-size:60px}
+        }
+        @media(max-width:768px){
+            .cp-hero{padding:90px 16px 40px}
+            .cp-hero h1{font-size:clamp(24px,7vw,38px)}
+            .cp-hero .cp-tag{font-size:16px}
+            .cp-hero .cp-price{font-size:20px}
+            .cp-back{font-size:13px;margin-bottom:16px}
+            .cp-content{margin:-24px auto 40px;padding:0 16px}
+            .cp-card{padding:24px 20px;border-radius:16px}
+            .cp-card h2{font-size:20px;margin-bottom:12px}
+            .cp-card p{font-size:14px;margin-bottom:24px}
+            .cp-specs{grid-template-columns:1fr;gap:8px;margin-bottom:24px}
+            .cp-spec{padding:14px 16px;border-radius:10px}
+            .cp-spec .spec-label{font-size:13px}
+            .cp-spec .spec-value{font-size:14px}
+            .cp-placeholder{margin-bottom:24px;aspect-ratio:4/3}
+            .cp-placeholder i{font-size:50px}
+        }
+        @media(max-width:480px){
+            .cp-hero{padding:80px 14px 32px}
+            .cp-hero h1{font-size:clamp(20px,8vw,30px)}
+            .cp-hero .cp-tag{font-size:14px}
+            .cp-hero .cp-price{font-size:18px}
+            .cp-content{margin:-20px auto 36px;padding:0 14px}
+            .cp-card{padding:20px 14px;border-radius:12px}
+            .cp-card h2{font-size:18px}
+            .cp-card p{font-size:13px;margin-bottom:20px}
+            .cp-spec{padding:12px 14px;border-radius:8px}
+            .cp-spec .spec-label{font-size:12px}
+            .cp-spec .spec-value{font-size:13px}
+            .cp-placeholder{margin-bottom:20px}
+            .cp-placeholder i{font-size:40px}
+        }
+        @media(hover:none) and (pointer:coarse){
+            .cp-back{padding:10px 0}
+        }
     </style>
 </head>
 <body>
 
-<header class="header scrolled"><div class="container header-inner">
-    <a href="index.html" class="logo"><img src="logo-nav.webp" alt="JAC MOTORS ANGREN"></a>
+<header class="header scrolled" id="header"><div class="container header-inner">
+    <a href="index.html" class="logo"><img src="logo-nav.webp" alt="JAC MOTORS ANGREN" class="logo-light"></a>
     <nav class="nav" id="nav"><ul class="nav-list">
         <li><a href="index.html#home" class="nav-link">Главная</a></li>
         <li><a href="index.html#models" class="nav-link active">Модели</a></li>
@@ -38,7 +83,7 @@
         <li><a href="index.html#services" class="nav-link">Сервис</a></li>
         <li><a href="index.html#contact" class="nav-link">Контакты</a></li>
     </ul></nav>
-    <div class="header-right"><a href="tel:+998712007711" class="header-phone"><i class="fas fa-phone-alt"></i> 71 200 77 11</a></div>
+    <div class="header-right"><a href="tel:+998712007711" class="header-phone"><i class="fas fa-phone-alt"></i> 71 200 77 11</a><button class="hamburger" id="hamburger" aria-label="Меню"><span></span><span></span><span></span></button></div>
 </div></header>
 
 <section class="car-page"><div class="cp-hero">
@@ -71,6 +116,40 @@
 </div></footer>
 
 <script>
+/* --- Mobile menu --- */
+(function(){
+    var hamburger = document.getElementById('hamburger');
+    var nav = document.getElementById('nav');
+    if (!hamburger || !nav) return;
+    var overlay = document.createElement('div');
+    overlay.className = 'nav-overlay';
+    document.body.appendChild(overlay);
+    function closeMenu(){
+        hamburger.classList.remove('active');
+        nav.classList.remove('active');
+        overlay.classList.remove('active');
+        document.body.style.overflow = '';
+        document.body.style.position = '';
+        document.body.style.width = '';
+    }
+    function openMenu(){
+        hamburger.classList.add('active');
+        nav.classList.add('active');
+        overlay.classList.add('active');
+        document.body.style.overflow = 'hidden';
+        document.body.style.position = 'fixed';
+        document.body.style.width = '100%';
+    }
+    hamburger.addEventListener('click', function(){
+        nav.classList.contains('active') ? closeMenu() : openMenu();
+    });
+    overlay.addEventListener('click', closeMenu);
+    var links = nav.querySelectorAll('.nav-link');
+    for (var i = 0; i < links.length; i++) links[i].addEventListener('click', closeMenu);
+    document.addEventListener('keydown', function(e){ if (e.key === 'Escape' && nav.classList.contains('active')) closeMenu(); });
+})();
+
+/* --- Car data --- */
 const cars = {
     js8:   {name:"JAC JS8",  tag:"Премиальный кроссовер", price:"313 650 000 сум", icon:"fa-car", desc:"JAC JS8 — флагманский кроссовер с просторным салоном и передовыми технологиями. Мощный 2.0L турбодвигатель, полный привод и богатое оснащение делают его идеальным выбором для города и трассы. Панорамная крыша, кожаный салон, продвинутые системы безопасности.",           specs:[["Двигатель","2.0L Turbo"],["Мощность","190 л.с."],["Коробка передач","Автомат 7-ст."],["Привод","Полный"],["Разгон 0-100","8.5 сек"],["Расход топлива","8.2 л/100км"],["Дорожный просвет","190 мм"],["Объём багажника","500 л"]]},
     t8:    {name:"JAC T8",   tag:"Внедорожник",            price:"330 330 000 сум", icon:"fa-car", desc:"JAC T8 — мощный рамный внедорожник для настоящих приключений. Дизельный двигатель, полный привод и внушительный дорожный просвет для уверенности на любом бездорожье.",                                             specs:[["Двигатель","2.0L Turbo Diesel"],["Мощность","170 л.с."],["Коробка передач","Автомат 8-ст."],["Привод","Полный"],["Разгон 0-100","10.5 сек"],["Расход топлива","9.0 л/100км"],["Дорожный просвет","220 мм"],["Грузоподъёмность","900 кг"]]},
@@ -108,6 +187,48 @@ const specsEl = document.getElementById('carSpecs');
 c.specs.forEach(s => {
     specsEl.innerHTML += '<div class="cp-spec"><span class="spec-label">' + s[0] + '</span><span class="spec-value">' + s[1] + '</span></div>';
 });
+
+/* --- Form submit --- */
+(function(){
+    var form = document.getElementById('contactForm');
+    if (!form) return;
+    form.addEventListener('submit', async function(e){
+        e.preventDefault();
+        var nameInput = form.querySelector('input[type="text"]');
+        var phoneInput = form.querySelector('input[type="tel"]');
+        var commentInput = form.querySelector('textarea');
+        var name = nameInput ? nameInput.value.trim() : '';
+        var phone = phoneInput ? phoneInput.value.trim() : '';
+        var comment = commentInput ? commentInput.value.trim() : '';
+        var valid = true;
+        if (!name) { nameInput.style.borderColor = '#E0311A'; valid = false; }
+        if (!phone) { phoneInput.style.borderColor = '#E0311A'; valid = false; }
+        if (!valid) return;
+        var btn = form.querySelector('button[type="submit"]');
+        var origText = btn.innerHTML;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Отправка...';
+        btn.disabled = true;
+        try {
+            var res = await fetch('https://jacauto-angren-bot.onrender.com/api/submit', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({name:name, phone:phone, model:c.name, comment:comment})
+            });
+            var data = await res.json();
+            if (data.ok) {
+                form.innerHTML = '<div style="text-align:center;padding:40px 0"><i class="fas fa-check-circle" style="font-size:48px;color:#E0311A;margin-bottom:16px"></i><h3>Заявка отправлена!</h3><p style="color:#8A8A8A;margin-top:8px">Мы свяжемся с вами в ближайшее время</p></div>';
+            } else {
+                btn.innerHTML = origText;
+                btn.disabled = false;
+                alert(data.error || 'Ошибка отправки. Позвоните нам: 71 200 77 11');
+            }
+        } catch(err) {
+            btn.innerHTML = origText;
+            btn.disabled = false;
+            alert('Сервер временно недоступен. Позвоните нам: 71 200 77 11');
+        }
+    });
+})();
 </script>
 </body>
 </html>

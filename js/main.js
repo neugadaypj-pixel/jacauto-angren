@@ -102,17 +102,59 @@ function initMobileMenu() {
     const hamburger = document.getElementById('hamburger');
     const nav = document.getElementById('nav');
     if (!hamburger || !nav) return;
+
+    // Create overlay element
+    const overlay = document.createElement('div');
+    overlay.className = 'nav-overlay';
+    document.body.appendChild(overlay);
+
+    const closeMenu = () => {
+        hamburger.classList.remove('active');
+        nav.classList.remove('active');
+        overlay.classList.remove('active');
+        document.body.style.overflow = '';
+        document.body.style.position = '';
+        document.body.style.width = '';
+    };
+
+    const openMenu = () => {
+        hamburger.classList.add('active');
+        nav.classList.add('active');
+        overlay.classList.add('active');
+        document.body.style.overflow = 'hidden';
+        // Prevent body scroll on iOS while keeping position
+        document.body.style.position = 'fixed';
+        document.body.style.width = '100%';
+    };
+
     hamburger.addEventListener('click', () => {
-        hamburger.classList.toggle('active');
-        nav.classList.toggle('active');
-        document.body.style.overflow = nav.classList.contains('active') ? 'hidden' : '';
+        if (nav.classList.contains('active')) {
+            closeMenu();
+        } else {
+            openMenu();
+        }
     });
+
+    // Close on overlay click
+    overlay.addEventListener('click', closeMenu);
+
+    // Close on nav link click
     document.querySelectorAll('.nav-link').forEach(link => {
-        link.addEventListener('click', () => {
-            hamburger.classList.remove('active');
-            nav.classList.remove('active');
-            document.body.style.overflow = '';
-        });
+        link.addEventListener('click', closeMenu);
+    });
+
+    // Close on Escape key
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && nav.classList.contains('active')) {
+            closeMenu();
+        }
+    });
+
+    // Auto-close on desktop resize
+    window.addEventListener('resize', () => {
+        if (window.innerWidth > 1024 && nav.classList.contains('active')) {
+            closeMenu();
+        }
     });
 }
 
