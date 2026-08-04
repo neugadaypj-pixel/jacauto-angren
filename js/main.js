@@ -228,71 +228,45 @@ function initMobileMenu() {
     const nav = document.getElementById('nav');
     if (!hamburger || !nav) return;
 
-    // Create overlay element
     const overlay = document.createElement('div');
     overlay.className = 'nav-overlay';
     document.body.appendChild(overlay);
 
-    let savedScrollY = 0;
+    // Prevent scroll-through on the underlay while menu is open
+    function preventScroll(e) {
+        e.preventDefault();
+    }
 
     const closeMenu = () => {
-        const y = savedScrollY;
         hamburger.classList.remove('active');
         nav.classList.remove('active');
         overlay.classList.remove('active');
-        // Release body lock
-        document.documentElement.style.overflow = '';
-        document.body.style.overflow = '';
-        document.body.style.position = '';
-        document.body.style.top = '';
-        document.body.style.width = '';
-        // Instantly restore scroll (synchronous, no animation)
-        document.documentElement.scrollTop = y;
-        document.body.scrollTop = y;
+        document.documentElement.classList.remove('menu-open');
+        document.removeEventListener('touchmove', preventScroll, { passive: false });
     };
 
     const openMenu = () => {
-        savedScrollY = window.scrollY;
         hamburger.classList.add('active');
         nav.classList.add('active');
         overlay.classList.add('active');
-        // Lock background WITHOUT losing scroll position
-        document.documentElement.style.overflow = 'hidden';
-        document.body.style.overflow = 'hidden';
-        document.body.style.position = 'fixed';
-        document.body.style.top = '-' + savedScrollY + 'px';
-        document.body.style.width = '100%';
+        document.documentElement.classList.add('menu-open');
+        document.addEventListener('touchmove', preventScroll, { passive: false });
     };
 
     hamburger.addEventListener('click', (e) => {
         e.preventDefault();
-        if (nav.classList.contains('active')) {
-            closeMenu();
-        } else {
-            openMenu();
-        }
+        nav.classList.contains('active') ? closeMenu() : openMenu();
     });
 
-    // Close on overlay click
     overlay.addEventListener('click', closeMenu);
-
-    // Close on nav link click
     document.querySelectorAll('.nav-link').forEach(link => {
         link.addEventListener('click', closeMenu);
     });
-
-    // Close on Escape key
     document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && nav.classList.contains('active')) {
-            closeMenu();
-        }
+        if (e.key === 'Escape' && nav.classList.contains('active')) closeMenu();
     });
-
-    // Auto-close on desktop resize
     window.addEventListener('resize', () => {
-        if (window.innerWidth > 1024 && nav.classList.contains('active')) {
-            closeMenu();
-        }
+        if (window.innerWidth > 1024 && nav.classList.contains('active')) closeMenu();
     });
 }
 
