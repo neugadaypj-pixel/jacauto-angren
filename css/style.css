@@ -68,11 +68,11 @@ h1,h2,h3,h4{font-family:var(--font);color:var(--primary);line-height:1.2}
 .header.scrolled .header-phone{color:var(--primary);background:var(--gray-100)}
 .header-phone:hover{background:var(--accent);color:var(--white)!important;transform:translateY(-2px)}
 .header-phone i{font-size:12px}
-.hamburger{display:none;align-items:center;justify-content:center;width:42px;height:42px;min-width:42px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.12);border-radius:50%;cursor:pointer;z-index:1001;backdrop-filter:blur(8px);transition:0.35s var(--ease);padding:0;flex-shrink:0}
+.hamburger{display:none;align-items:center;justify-content:center;width:42px;height:42px;min-width:42px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.12);border-radius:50%;cursor:pointer;z-index:1001;backdrop-filter:blur(8px);transition:0.35s var(--ease);padding:0;flex-shrink:0;line-height:0;font-size:0;font-family:var(--font)}
 .hamburger:hover{background:rgba(255,255,255,0.15);border-color:rgba(255,255,255,0.25)}
 .header.scrolled .hamburger{background:var(--gray-100);border-color:var(--gray-200)}
 .header.scrolled .hamburger:hover{background:var(--gray-200)}
-.hamburger-inner{position:relative;width:20px;height:14px;display:flex;align-items:center;justify-content:center}
+.hamburger-inner{position:relative;width:20px;height:14px;display:block}
 .hamburger span{display:block;position:absolute;left:0;width:20px;height:2px;background:var(--white);border-radius:3px;transition:0.35s var(--ease)}
 .hamburger span:nth-child(1){top:0;transform-origin:left center}
 .hamburger span:nth-child(2){top:6px;transform-origin:center center}
@@ -413,7 +413,7 @@ h1,h2,h3,h4{font-family:var(--font);color:var(--primary);line-height:1.2}
     .header-phone{padding:8px 14px;font-size:12px;gap:6px;white-space:nowrap}
     .header-phone i{font-size:10px}
     .hamburger{width:40px;height:40px;min-width:40px;padding:0;display:flex;align-items:center;justify-content:center}
-    .hamburger-inner{display:flex;align-items:center;justify-content:center}
+    .hamburger-inner{display:block}
 
     /* Nav */
     .nav{width:100%;max-width:320px}
@@ -544,7 +544,7 @@ h1,h2,h3,h4{font-family:var(--font);color:var(--primary);line-height:1.2}
     .header-phone i{font-size:9px}
     .header-right{gap:8px}
     .hamburger{width:36px;height:36px;min-width:36px}
-    .hamburger-inner{width:18px;height:12px}
+    .hamburger-inner{width:18px;height:12px;display:block}
     .hamburger span{width:18px;height:2px}
     .hamburger span:nth-child(2){top:5px}
     .hamburger span:nth-child(3){top:10px}
