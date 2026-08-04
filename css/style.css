@@ -69,50 +69,67 @@ h1,h2,h3,h4{font-family:var(--font);color:var(--primary);line-height:1.2}
 .header-phone:hover{background:var(--accent);color:var(--white)!important;transform:translateY(-2px)}
 .header-phone i{font-size:12px}
 
-/* ── Hamburger: zero-child approach ──
-   Three bars = background-image (middle) + box-shadow (top/bottom)
-   X state   = ::before + ::after rotated lines
-   Everything is intrinsic — no DOM children, no baseline issues */
+/* ── Hamburger — modern morphing ──
+   ::before = top bar + middle bar (via box-shadow)
+   ::after  = bottom bar
+   Active: bars slide to center and rotate into X */
 .hamburger{
     display:none;
     appearance:none;-webkit-appearance:none;
     position:relative;
     width:42px;height:42px;min-width:42px;
-    padding:0;border:1px solid rgba(255,255,255,0.12);
+    padding:0;margin:0;
+    border:1px solid rgba(255,255,255,0.12);
     border-radius:50%;
     cursor:pointer;z-index:1001;
     flex-shrink:0;
-    background-color:rgba(255,255,255,0.08);
-    background-image:linear-gradient(var(--white),var(--white));
-    background-repeat:no-repeat;
-    background-position:center;
-    background-size:20px 2px;
-    box-shadow:0 -7px 0 var(--white), 0 7px 0 var(--white);
+    background:rgba(255,255,255,0.08);
     backdrop-filter:blur(8px);
-    transition:0.35s var(--ease)
+    transition:background 0.3s var(--ease), border-color 0.3s var(--ease)
 }
-.hamburger:hover{background-color:rgba(255,255,255,0.15);border-color:rgba(255,255,255,0.25)}
-.header.scrolled .hamburger{
-    background-color:var(--gray-100);border-color:var(--gray-200);
-    background-image:linear-gradient(var(--primary),var(--primary));
-    box-shadow:0 -7px 0 var(--primary), 0 7px 0 var(--primary)
+.hamburger::before,.hamburger::after{
+    content:'';
+    position:absolute;left:11px;
+    width:20px;height:1.5px;
+    border-radius:2px;
+    background:var(--white);
+    transition:all 0.35s var(--ease)
 }
-.header.scrolled .hamburger:hover{background-color:var(--gray-200)}
+.hamburger::before{top:14px;box-shadow:0 6px 0 var(--white)}
+.hamburger::after{top:26px}
 
-/* Active = X */
-.hamburger.active,
-.header.scrolled .hamburger.active{
-    background-color:var(--accent)!important;border-color:var(--accent)!important;
-    background-image:none!important;background-size:0 0;box-shadow:none!important
+.hamburger:hover{
+    background:rgba(255,255,255,0.15);
+    border-color:rgba(255,255,255,0.25)
 }
-.hamburger.active:hover{background-color:var(--accent2)!important}
-.hamburger.active::before,.hamburger.active::after{
-    content:'';position:absolute;top:50%;left:50%;
-    width:20px;height:2px;background:var(--white);border-radius:3px;
-    transition:0.35s var(--ease)
+
+/* Scrolled */
+.header.scrolled .hamburger{
+    background:var(--gray-100);border-color:var(--gray-200)
 }
-.hamburger.active::before{transform:translate(-50%,-50%) rotate(45deg)}
-.hamburger.active::after {transform:translate(-50%,-50%) rotate(-45deg)}
+.header.scrolled .hamburger::before,
+.header.scrolled .hamburger::after{
+    background:var(--primary)
+}
+.header.scrolled .hamburger::before{
+    box-shadow:0 6px 0 var(--primary)
+}
+.header.scrolled .hamburger:hover{
+    background:var(--gray-200)
+}
+
+/* Active — morph to X */
+.hamburger.active{
+    background:var(--accent)!important;border-color:var(--accent)!important
+}
+.hamburger.active:hover{background:var(--accent2)!important}
+.hamburger.active::before{
+    box-shadow:none;
+    transform:translateY(6px) rotate(45deg)
+}
+.hamburger.active::after{
+    transform:translateY(-6px) rotate(-45deg)
+}
 
 /* Nav overlay */
 .nav-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:998;opacity:0;visibility:hidden;transition:opacity 0.35s,visibility 0.35s}
