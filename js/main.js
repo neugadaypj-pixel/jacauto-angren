@@ -236,19 +236,19 @@ function initMobileMenu() {
     let savedScrollY = 0;
 
     const closeMenu = () => {
+        const y = savedScrollY;
         hamburger.classList.remove('active');
         nav.classList.remove('active');
         overlay.classList.remove('active');
-        // Restore scroll position BEFORE releasing body lock
-        // so there's no visible jump-down animation
-        window.scrollTo(0, savedScrollY);
-        requestAnimationFrame(() => {
-            document.documentElement.style.overflow = '';
-            document.body.style.overflow = '';
-            document.body.style.position = '';
-            document.body.style.top = '';
-            document.body.style.width = '';
-        });
+        // Release body lock
+        document.documentElement.style.overflow = '';
+        document.body.style.overflow = '';
+        document.body.style.position = '';
+        document.body.style.top = '';
+        document.body.style.width = '';
+        // Instantly restore scroll (synchronous, no animation)
+        document.documentElement.scrollTop = y;
+        document.body.scrollTop = y;
     };
 
     const openMenu = () => {
