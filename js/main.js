@@ -233,22 +233,30 @@ function initMobileMenu() {
     overlay.className = 'nav-overlay';
     document.body.appendChild(overlay);
 
+    let savedScrollY = 0;
+
     const closeMenu = () => {
         hamburger.classList.remove('active');
         nav.classList.remove('active');
         overlay.classList.remove('active');
+        document.documentElement.style.overflow = '';
         document.body.style.overflow = '';
         document.body.style.position = '';
+        document.body.style.top = '';
         document.body.style.width = '';
+        window.scrollTo(0, savedScrollY);
     };
 
     const openMenu = () => {
+        savedScrollY = window.scrollY;
         hamburger.classList.add('active');
         nav.classList.add('active');
         overlay.classList.add('active');
+        // Lock background WITHOUT losing scroll position
+        document.documentElement.style.overflow = 'hidden';
         document.body.style.overflow = 'hidden';
-        // Prevent body scroll on iOS while keeping position
         document.body.style.position = 'fixed';
+        document.body.style.top = '-' + savedScrollY + 'px';
         document.body.style.width = '100%';
     };
 
