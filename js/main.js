@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initCounters();
     initModelTabs();
     initModelCarousel();
+    initModelCardClicks();
     initMobileMenu();
     initSmoothScroll();
     initForm();
@@ -198,6 +199,27 @@ function initModelCarousel() {
     if (isCarouselActive()) {
         rebuildCarouselDots();
     }
+}
+
+/* --- Clickable model cards — entire card navigates to car page --- */
+function initModelCardClicks() {
+    const grid = document.getElementById('modelsGrid');
+    if (!grid) return;
+
+    grid.addEventListener('click', function(e) {
+        // Find the closest .model-card ancestor
+        const card = e.target.closest('.model-card');
+        if (!card) return;
+
+        // If user clicked the explicit link, let it handle natively
+        if (e.target.closest('.model-link')) return;
+
+        // Otherwise navigate via the card's inner link href
+        const link = card.querySelector('.model-link');
+        if (link) {
+            window.location.href = link.getAttribute('href');
+        }
+    });
 }
 
 /* --- Mobile menu --- */
