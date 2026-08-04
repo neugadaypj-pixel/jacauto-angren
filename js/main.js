@@ -252,7 +252,8 @@ function initMobileMenu() {
         document.body.style.width = '100%';
     };
 
-    hamburger.addEventListener('click', () => {
+    hamburger.addEventListener('click', (e) => {
+        e.preventDefault();
         if (nav.classList.contains('active')) {
             closeMenu();
         } else {
