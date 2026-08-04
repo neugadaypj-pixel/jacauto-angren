@@ -8,6 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initRevealAnimations();
     initCounters();
     initModelTabs();
+    initModelCarousel();
     initMobileMenu();
     initSmoothScroll();
     initForm();
@@ -93,8 +94,110 @@ function initModelTabs() {
                     card.style.animation = '';
                 }
             });
+            // Rebuild carousel dots after filtering
+            rebuildCarouselDots();
         });
     });
+}
+
+/* --- Model carousel (mobile swipe) --- */
+function initModelCarousel() {
+    const grid = document.getElementById('modelsGrid');
+    const prevBtn = document.getElementById('carouselPrev');
+    const nextBtn = document.getElementById('carouselNext');
+    const dotsContainer = document.getElementById('carouselDots');
+    if (!grid || !prevBtn || !nextBtn || !dotsContainer) return;
+
+    const isCarouselActive = () => window.innerWidth <= 768;
+
+    function getVisibleCards() {
+        return Array.from(grid.querySelectorAll('.model-card')).filter(c => !c.classList.contains('hidden-card'));
+    }
+
+    function scrollToCard(index) {
+        const cards = getVisibleCards();
+        if (index < 0 || index >= cards.length) return;
+        const card = cards[index];
+        const gridRect = grid.getBoundingClientRect();
+        const cardRect = card.getBoundingClientRect();
+        const scrollOffset = grid.scrollLeft + cardRect.left - gridRect.left - (grid.clientWidth - card.offsetWidth) / 2;
+        grid.scrollTo({ left: scrollOffset, behavior: 'smooth' });
+    }
+
+    function getCurrentIndex() {
+        const cards = getVisibleCards();
+        if (!cards.length) return 0;
+        const gridCenter = grid.scrollLeft + grid.clientWidth / 2;
+        let closest = 0;
+        let closestDist = Infinity;
+        cards.forEach((card, i) => {
+            const cardCenter = card.offsetLeft + card.offsetWidth / 2;
+            const dist = Math.abs(gridCenter - cardCenter);
+            if (dist < closestDist) { closest = i; closestDist = dist; }
+        });
+        return closest;
+    }
+
+    function updateDots() {
+        const cards = getVisibleCards();
+        const dots = dotsContainer.querySelectorAll('.carousel-dot');
+        const current = getCurrentIndex();
+        dots.forEach((dot, i) => {
+            dot.classList.toggle('active', i === current);
+        });
+        // Update arrow disabled state
+        prevBtn.disabled = current === 0;
+        nextBtn.disabled = current >= cards.length - 1;
+    }
+
+    function rebuildCarouselDots() {
+        if (!isCarouselActive()) return;
+        const cards = getVisibleCards();
+        dotsContainer.innerHTML = '';
+        cards.forEach((_, i) => {
+            const dot = document.createElement('button');
+            dot.className = 'carousel-dot';
+            dot.setAttribute('aria-label', 'Модель ' + (i + 1));
+            dot.addEventListener('click', () => scrollToCard(i));
+            dotsContainer.appendChild(dot);
+        });
+        updateDots();
+    }
+
+    // Expose to global scope so model tabs can call it
+    window.rebuildCarouselDots = rebuildCarouselDots;
+
+    // Arrow buttons
+    prevBtn.addEventListener('click', () => {
+        const idx = getCurrentIndex();
+        if (idx > 0) scrollToCard(idx - 1);
+    });
+    nextBtn.addEventListener('click', () => {
+        const cards = getVisibleCards();
+        const idx = getCurrentIndex();
+        if (idx < cards.length - 1) scrollToCard(idx + 1);
+    });
+
+    // Scroll listener to update dots
+    grid.addEventListener('scroll', updateDots, { passive: true });
+
+    // Build dots on load and on resize
+    let resizeTimeout;
+    window.addEventListener('resize', () => {
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(() => {
+            if (isCarouselActive()) {
+                rebuildCarouselDots();
+            } else {
+                dotsContainer.innerHTML = '';
+            }
+        }, 150);
+    });
+
+    // Initial build if mobile
+    if (isCarouselActive()) {
+        rebuildCarouselDots();
+    }
 }
 
 /* --- Mobile menu --- */
@@ -217,12 +320,12 @@ function initForm() {
             } else {
                 btn.innerHTML = origText;
                 btn.disabled = false;
-                alert(data.error || 'Ошибка отправки. Позвоните нам: 78 113 10 08');
+                alert(data.error || 'Ошибка отправки. Позвоните нам: 71 200 77 11');
             }
         } catch (err) {
             btn.innerHTML = origText;
             btn.disabled = false;
-            alert('Сервер временно недоступен. Позвоните нам: 78 113 10 08');
+            alert('Сервер временно недоступен. Позвоните нам: 71 200 77 11');
         }
     });
 }

@@ -17,7 +17,7 @@ from telegram.error import TelegramError
 # ============================================================
 # CONFIG
 # ============================================================
-BOT_TOKEN = "8854046020:AAHtK4ZTZLDt5_TowHAUIXFVBmcuYNxZdE8"
+BOT_TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN", "")
 
 # List of users who can accept/reject leads (telegram user IDs)
 # Replace with real user IDs of managers/sales people
@@ -37,8 +37,8 @@ RATE_LIMIT_WINDOW = 20 * 60  # seconds
 # STATE
 # ============================================================
 app = Flask(__name__)
-CORS(app, origins=['https://neugadaypj-pixel.github.io', 'https://jacauto.uz', 'http://localhost:*'])
-bot = Bot(token=BOT_TOKEN)
+CORS(app, origins=['https://neugadaypj-pixel.github.io', 'https://jacauto.uz'])
+bot = Bot(token=BOT_TOKEN) if BOT_TOKEN else None
 
 # In-memory store
 pending_leads = {}     # {lead_id: {...}}
@@ -102,6 +102,8 @@ def format_lead_message(lead):
 # SEND LEAD TO RANDOM MANAGER
 # ============================================================
 def send_to_random_manager(lead_id):
+    if not bot:
+        return
     lead = pending_leads.get(lead_id)
     if not lead or not MANAGER_IDS:
         return
@@ -221,6 +223,8 @@ def webhook():
     return 'ok', 200
 
 def handle_message(msg):
+    if not bot:
+        return
     chat_id = msg['chat']['id']
     text = msg.get('text', '')
 
@@ -258,6 +262,8 @@ def handle_message(msg):
             bot.send_message(chat_id=chat_id, text="Вас нет в списке менеджеров.")
 
 def handle_callback(cb):
+    if not bot:
+        return
     chat_id = cb['message']['chat']['id']
     data = cb['data']
     message_id = cb['message']['message_id']
@@ -334,8 +340,9 @@ def index():
 # MAIN
 # ============================================================
 if __name__ == '__main__':
+    if not BOT_TOKEN:
+        print("⚠️  WARNING: TELEGRAM_BOT_TOKEN environment variable not set!")
     print("🚀 Starting JAC MOTORS ANGREN backend...")
-    print(f"   Bot token: {BOT_TOKEN[:10]}...")
     print(f"   Managers: {MANAGER_IDS}")
     print("   Register managers by sending /start to the bot on Telegram")
     app.run(host='0.0.0.0', port=5000, debug=True)
