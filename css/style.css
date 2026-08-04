@@ -70,11 +70,11 @@ h1,h2,h3,h4{font-family:var(--font);color:var(--primary);line-height:1.2}
 .header-phone i{font-size:12px}
 
 /* ── Hamburger — mathematically centered ──
-   All positions use left:50% + translateX(-50%) so bars
-   stay centered at ANY button size (42px, 40px, 36px).
-   Vertical: all three bars anchored from top:50%.
-   Middle bar at exact center: top:50% translate(-50%,-50%).
-   Top/bottom bars offset by ±6px from center. */
+   Three bars drawn without box-shadow (avoids transition artifacts):
+   • Button background-image = middle bar
+   • ::before = top bar
+   • ::after  = bottom bar
+   Active: middle bar fades (bg-img→none), ::before/::after rotate to X */
 .hamburger{
     display:none;
     appearance:none;-webkit-appearance:none;
@@ -85,11 +85,14 @@ h1,h2,h3,h4{font-family:var(--font);color:var(--primary);line-height:1.2}
     border-radius:50%;
     cursor:pointer;z-index:1001;
     flex-shrink:0;
-    background:rgba(255,255,255,0.08);
+    background-color:rgba(255,255,255,0.08);
+    background-image:linear-gradient(var(--white),var(--white));
+    background-size:20px 1.5px;
+    background-position:center;
+    background-repeat:no-repeat;
     backdrop-filter:blur(8px);
-    transition:background 0.3s var(--ease), border-color 0.3s var(--ease)
+    transition:background-color 0.3s var(--ease), border-color 0.3s var(--ease), background-size 0.35s var(--ease)
 }
-/* Top bar (at center-6px) + middle bar via box-shadow */
 .hamburger::before{
     content:'';
     position:absolute;top:50%;left:50%;
@@ -97,10 +100,8 @@ h1,h2,h3,h4{font-family:var(--font);color:var(--primary);line-height:1.2}
     width:20px;height:1.5px;
     border-radius:2px;
     background:var(--white);
-    box-shadow:0 6px 0 var(--white);
     transition:all 0.35s var(--ease)
 }
-/* Bottom bar (at center+6px) */
 .hamburger::after{
     content:'';
     position:absolute;top:50%;left:50%;
@@ -112,32 +113,31 @@ h1,h2,h3,h4{font-family:var(--font);color:var(--primary);line-height:1.2}
 }
 
 .hamburger:hover{
-    background:rgba(255,255,255,0.15);
+    background-color:rgba(255,255,255,0.15);
     border-color:rgba(255,255,255,0.25)
 }
 
 /* Scrolled */
 .header.scrolled .hamburger{
-    background:var(--gray-100);border-color:var(--gray-200)
+    background-color:var(--gray-100);border-color:var(--gray-200);
+    background-image:linear-gradient(var(--primary),var(--primary))
 }
 .header.scrolled .hamburger::before,
 .header.scrolled .hamburger::after{
     background:var(--primary)
 }
-.header.scrolled .hamburger::before{
-    box-shadow:0 6px 0 var(--primary)
-}
 .header.scrolled .hamburger:hover{
-    background:var(--gray-200)
+    background-color:var(--gray-200)
 }
 
 /* Active — morph to X */
-.hamburger.active{
-    background:var(--accent)!important;border-color:var(--accent)!important
+.hamburger.active,
+.header.scrolled .hamburger.active{
+    background-color:var(--accent)!important;border-color:var(--accent)!important;
+    background-image:none!important;background-size:0 0
 }
-.hamburger.active:hover{background:var(--accent2)!important}
+.hamburger.active:hover{background-color:var(--accent2)!important}
 .hamburger.active::before{
-    box-shadow:none;
     transform:translate(-50%,-50%) rotate(45deg)
 }
 .hamburger.active::after{
