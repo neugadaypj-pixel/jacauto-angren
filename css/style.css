@@ -408,9 +408,9 @@ h1,h2,h3,h4{font-family:var(--font);color:var(--primary);line-height:1.2}
     .container{padding:0 16px}
     .header-inner{padding-left:16px;padding-right:16px;padding-top:14px;padding-bottom:14px}
 
-    /* Header — ensure hamburger and phone are properly aligned */
+    /* Header — ensure hamburger and phone are at same level */
     .header-right{gap:10px}
-    .header-phone{padding:8px 14px;font-size:12px;gap:6px;white-space:nowrap}
+    .header-phone{padding:0 14px;font-size:12px;gap:6px;white-space:nowrap;height:40px}
     .header-phone i{font-size:10px}
     .hamburger{width:40px;height:40px;min-width:40px;padding:0;display:flex;align-items:center;justify-content:center}
     .hamburger-inner{display:block}
@@ -466,8 +466,8 @@ h1,h2,h3,h4{font-family:var(--font);color:var(--primary);line-height:1.2}
     }
     .models-grid::-webkit-scrollbar{display:none}
     .model-card{
-        flex:0 0 82vw;
-        max-width:380px;
+        flex:0 0 74vw;
+        max-width:320px;
         scroll-snap-align:center;
         border-radius:var(--radius);
         transition:0.35s var(--ease)
@@ -540,7 +540,7 @@ h1,h2,h3,h4{font-family:var(--font);color:var(--primary);line-height:1.2}
 
     /* Header */
     .logo img{height:20px;max-width:120px}
-    .header-phone{padding:6px 12px;font-size:11px;gap:4px}
+    .header-phone{padding:0 12px;font-size:11px;gap:4px;height:36px}
     .header-phone i{font-size:9px}
     .header-right{gap:8px}
     .hamburger{width:36px;height:36px;min-width:36px}
@@ -582,7 +582,7 @@ h1,h2,h3,h4{font-family:var(--font);color:var(--primary);line-height:1.2}
     .carousel-prev{left:0}
     .carousel-next{right:0}
     .models-grid{gap:12px}
-    .model-card{flex:0 0 85vw;max-width:340px}
+    .model-card{flex:0 0 78vw;max-width:300px}
     .model-info{padding:16px}
     .model-info h3{font-size:17px}
     .model-link{font-size:13px}
