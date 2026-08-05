@@ -151,25 +151,17 @@ function initModelCarousel() {
     }
 
     var _rebuildLock = false;
-    var _rebuildCallCount = 0;
     function rebuildCarouselDots() {
         if (!isCarouselActive()) return;
-        if (_rebuildLock) { console.warn('[DOTS] REBUILD BLOCKED (concurrent)'); return; }
+        if (_rebuildLock) return;
         _rebuildLock = true;
-        _rebuildCallCount++;
-        console.log('[DOTS] rebuildCarouselDots #' + _rebuildCallCount);
-        
-        // Completely nuke the container
+        // Triple-clear to guarantee no ghost nodes survive
         dotsContainer.innerHTML = '';
         dotsContainer.textContent = '';
         var child;
-        while ((child = dotsContainer.firstChild)) {
-            child.remove();
-        }
+        while ((child = dotsContainer.firstChild)) { child.remove(); }
         
         const cards = getVisibleCards();
-        console.log('[DOTS] visible cards: ' + cards.length + ' | dots in container after clear: ' + dotsContainer.children.length);
-        
         cards.forEach(function(_, i) {
             var dot = document.createElement('button');
             dot.className = 'carousel-dot';
@@ -177,8 +169,6 @@ function initModelCarousel() {
             dot.addEventListener('click', (function(idx) { return function(e) { e.preventDefault(); scrollToCard(idx); }; })(i));
             dotsContainer.appendChild(dot);
         });
-        
-        console.log('[DOTS] built ' + dotsContainer.children.length + ' dots (cards=' + cards.length + ')');
         updateDots();
         _rebuildLock = false;
     }
