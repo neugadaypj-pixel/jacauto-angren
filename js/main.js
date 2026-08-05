@@ -151,10 +151,13 @@ function initModelCarousel() {
         nextBtn.disabled = current >= cards.length - 1;
     }
 
+    let rebuildingDots = false;
     function rebuildCarouselDots() {
         if (!isCarouselActive()) return;
+        if (rebuildingDots) return; // prevent concurrent rebuilds
+        rebuildingDots = true;
         const cards = getVisibleCards();
-        // Remove ALL existing dots including any stray elements
+        // Remove ALL existing dots
         while (dotsContainer.firstChild) {
             dotsContainer.removeChild(dotsContainer.firstChild);
         }
@@ -166,6 +169,7 @@ function initModelCarousel() {
             dotsContainer.appendChild(dot);
         });
         updateDots();
+        rebuildingDots = false;
     }
 
     // Expose to global scope so model tabs can call it
