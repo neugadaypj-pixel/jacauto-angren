@@ -96,7 +96,7 @@ function initModelTabs() {
                 }
             });
             // Rebuild carousel dots after filtering
-            rebuildCarouselDots();
+            if (window.rebuildCarouselDots) window.rebuildCarouselDots();
         });
     });
 }
