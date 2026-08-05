@@ -6,7 +6,6 @@ document.addEventListener('DOMContentLoaded', () => {
     initPreloader();
     initHeader();
     initRevealAnimations();
-    initCounters();
     initModelTabs();
     initModelCarousel();
     initModelCardClicks();
@@ -14,6 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initSmoothScroll();
     initForm();
     initNavHighlight();
+    initScrollToTop();
 });
 
 /* --- Preloader --- */
@@ -48,32 +48,6 @@ function initRevealAnimations() {
         });
     }, { rootMargin: '0px 0px -40px 0px', threshold: 0.1 });
     reveals.forEach(el => observer.observe(el));
-}
-
-/* --- Counter animation --- */
-function initCounters() {
-    const counters = document.querySelectorAll('.stat-number[data-count]');
-    if (!counters.length) return;
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                const el = entry.target;
-                const target = parseInt(el.dataset.count);
-                const duration = 2000;
-                const start = performance.now();
-                function update(now) {
-                    const p = Math.min((now - start) / duration, 1);
-                    const ease = 1 - Math.pow(1 - p, 4);
-                    el.textContent = Math.floor(ease * target);
-                    if (p < 1) requestAnimationFrame(update);
-                    else el.textContent = target;
-                }
-                requestAnimationFrame(update);
-                observer.unobserve(el);
-            }
-        });
-    }, { threshold: 0.5 });
-    counters.forEach(c => observer.observe(c));
 }
 
 /* --- Model filter tabs --- */
@@ -201,7 +175,6 @@ function initModelCarousel() {
 
     // Initial build if mobile
     if (isCarouselActive()) {
-        console.log('[DOTS] initial build on page load');
         rebuildCarouselDots();
     }
 }
@@ -355,14 +328,22 @@ function initNavHighlight() {
     }, { passive: true });
 }
 
-/* --- Parallax orbs --- */
-window.addEventListener('scroll', () => {
-    const y = window.scrollY;
-    document.querySelectorAll('.hero-orb').forEach((orb, i) => {
-        const speed = (i + 1) * 0.01;
-        orb.style.transform = `translate(${y * speed}px, ${-y * speed * 1.5}px)`;
+/* --- Scroll to top --- */
+function initScrollToTop() {
+    var btn = document.createElement('button');
+    btn.className = 'scroll-top';
+    btn.setAttribute('aria-label', 'Наверх');
+    btn.innerHTML = '<i class="fas fa-chevron-up"></i>';
+    document.body.appendChild(btn);
+    
+    window.addEventListener('scroll', function() {
+        btn.classList.toggle('visible', window.scrollY > 500);
+    }, { passive: true });
+    
+    btn.addEventListener('click', function() {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     });
-}, { passive: true });
+}
 
 /* --- Inject card animation --- */
 const style = document.createElement('style');
