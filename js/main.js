@@ -150,24 +150,37 @@ function initModelCarousel() {
         nextBtn.disabled = current >= cards.length - 1;
     }
 
+    var _rebuildLock = false;
+    var _rebuildCallCount = 0;
     function rebuildCarouselDots() {
         if (!isCarouselActive()) return;
-        // Remove all existing dots completely
+        if (_rebuildLock) { console.warn('[DOTS] REBUILD BLOCKED (concurrent)'); return; }
+        _rebuildLock = true;
+        _rebuildCallCount++;
+        console.log('[DOTS] rebuildCarouselDots #' + _rebuildCallCount);
+        
+        // Completely nuke the container
+        dotsContainer.innerHTML = '';
         dotsContainer.textContent = '';
-        // Also remove any leftover children via DOM
         var child;
         while ((child = dotsContainer.firstChild)) {
-            dotsContainer.removeChild(child);
+            child.remove();
         }
+        
         const cards = getVisibleCards();
+        console.log('[DOTS] visible cards: ' + cards.length + ' | dots in container after clear: ' + dotsContainer.children.length);
+        
         cards.forEach(function(_, i) {
             var dot = document.createElement('button');
             dot.className = 'carousel-dot';
             dot.setAttribute('aria-label', 'Модель ' + (i + 1));
-            dot.addEventListener('click', (function(idx) { return function() { scrollToCard(idx); }; })(i));
+            dot.addEventListener('click', (function(idx) { return function(e) { e.preventDefault(); scrollToCard(idx); }; })(i));
             dotsContainer.appendChild(dot);
         });
+        
+        console.log('[DOTS] built ' + dotsContainer.children.length + ' dots (cards=' + cards.length + ')');
         updateDots();
+        _rebuildLock = false;
     }
 
     // Expose to global scope so model tabs can call it
@@ -187,7 +200,7 @@ function initModelCarousel() {
     // Scroll listener to update dots
     grid.addEventListener('scroll', updateDots, { passive: true });
 
-    // Only show/hide dots on resize — don't rebuild (count doesn't change)
+    // Only show/hide dots on resize — don't rebuild
     window.addEventListener('resize', function() {
         if (isCarouselActive()) {
             dotsContainer.style.display = 'flex';
@@ -198,6 +211,7 @@ function initModelCarousel() {
 
     // Initial build if mobile
     if (isCarouselActive()) {
+        console.log('[DOTS] initial build on page load');
         rebuildCarouselDots();
     }
 }
