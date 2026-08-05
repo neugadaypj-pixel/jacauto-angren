@@ -154,7 +154,10 @@ function initModelCarousel() {
     function rebuildCarouselDots() {
         if (!isCarouselActive()) return;
         const cards = getVisibleCards();
-        dotsContainer.innerHTML = '';
+        // Remove ALL existing dots including any stray elements
+        while (dotsContainer.firstChild) {
+            dotsContainer.removeChild(dotsContainer.firstChild);
+        }
         cards.forEach((_, i) => {
             const dot = document.createElement('button');
             dot.className = 'carousel-dot';
