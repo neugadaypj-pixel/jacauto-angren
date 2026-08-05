@@ -146,60 +146,54 @@ function initModelCarousel() {
         dots.forEach((dot, i) => {
             dot.classList.toggle('active', i === current);
         });
-        // Update arrow disabled state
         prevBtn.disabled = current === 0;
         nextBtn.disabled = current >= cards.length - 1;
     }
 
-    let rebuildingDots = false;
     function rebuildCarouselDots() {
         if (!isCarouselActive()) return;
-        if (rebuildingDots) return; // prevent concurrent rebuilds
-        rebuildingDots = true;
-        const cards = getVisibleCards();
-        // Remove ALL existing dots
-        while (dotsContainer.firstChild) {
-            dotsContainer.removeChild(dotsContainer.firstChild);
+        // Remove all existing dots completely
+        dotsContainer.textContent = '';
+        // Also remove any leftover children via DOM
+        var child;
+        while ((child = dotsContainer.firstChild)) {
+            dotsContainer.removeChild(child);
         }
-        cards.forEach((_, i) => {
-            const dot = document.createElement('button');
+        const cards = getVisibleCards();
+        cards.forEach(function(_, i) {
+            var dot = document.createElement('button');
             dot.className = 'carousel-dot';
             dot.setAttribute('aria-label', 'Модель ' + (i + 1));
-            dot.addEventListener('click', () => scrollToCard(i));
+            dot.addEventListener('click', (function(idx) { return function() { scrollToCard(idx); }; })(i));
             dotsContainer.appendChild(dot);
         });
         updateDots();
-        rebuildingDots = false;
     }
 
     // Expose to global scope so model tabs can call it
     window.rebuildCarouselDots = rebuildCarouselDots;
 
     // Arrow buttons
-    prevBtn.addEventListener('click', () => {
-        const idx = getCurrentIndex();
+    prevBtn.addEventListener('click', function() {
+        var idx = getCurrentIndex();
         if (idx > 0) scrollToCard(idx - 1);
     });
-    nextBtn.addEventListener('click', () => {
-        const cards = getVisibleCards();
-        const idx = getCurrentIndex();
+    nextBtn.addEventListener('click', function() {
+        var idx = getCurrentIndex();
+        var cards = getVisibleCards();
         if (idx < cards.length - 1) scrollToCard(idx + 1);
     });
 
     // Scroll listener to update dots
     grid.addEventListener('scroll', updateDots, { passive: true });
 
-    // Build dots on load and on resize
-    let resizeTimeout;
-    window.addEventListener('resize', () => {
-        clearTimeout(resizeTimeout);
-        resizeTimeout = setTimeout(() => {
-            if (isCarouselActive()) {
-                rebuildCarouselDots();
-            } else {
-                dotsContainer.innerHTML = '';
-            }
-        }, 150);
+    // Only show/hide dots on resize — don't rebuild (count doesn't change)
+    window.addEventListener('resize', function() {
+        if (isCarouselActive()) {
+            dotsContainer.style.display = 'flex';
+        } else {
+            dotsContainer.style.display = 'none';
+        }
     });
 
     // Initial build if mobile
