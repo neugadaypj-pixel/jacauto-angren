@@ -8,7 +8,7 @@ models = [
     ("commercial", "JAC X200 ТЕНТОВКА", "255 360 000 сум", "x200t"),
     ("commercial", "JAC X200 ПРОМТОВАРНЫЙ", "275 520 000 сум", "x200p"),
     ("commercial", "JAC M3 VAN", "209 034 000 сум", "m3"),
-    ("commercial", "JAC M3 Luxe", "226 233 000 сум", "m3l"),
+    ("commercial", "JAC M3 PLUS", "226 233 000 сум", "m3l"),
     ("commercial", "JAC M4 REFINE", "255 339 000 сум", "m4"),
     ("commercial", "SUNRAY VAN", "383 670 000 сум", "sunrayv"),
     ("commercial", "SUNRAY BUS", "416 745 000 сум", "sunrayb"),
