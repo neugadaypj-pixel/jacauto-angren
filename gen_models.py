@@ -2,7 +2,7 @@ models = [
     ("crossovers", "JAC JS8", "313 650 000 сум", "js8"),
     ("crossovers", "JAC T8", "330 330 000 сум", "t8"),
     ("crossovers", "JAC T9", "419 265 000 сум", "t9"),
-    ("sedans", "JAC J7", "235 000 000 сум", "j7"),
+    ("sedans", "JAC J7", "205 000 000 сум", "j7"),
     ("sedans", "JAC RF8", "444 675 000 сум", "rf8"),
     ("commercial", "JAC X200 БОРТОВОЙ", "248 640 000 сум", "x200b"),
     ("commercial", "JAC X200 ТЕНТОВКА", "255 360 000 сум", "x200t"),

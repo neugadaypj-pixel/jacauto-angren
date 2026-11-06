@@ -8,6 +8,7 @@ import time
 import threading
 import random
 import json
+import hmac
 from datetime import datetime, timedelta
 from flask import Flask, request, jsonify
 from flask_cors import CORS
@@ -21,10 +22,7 @@ BOT_TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN", "")
 
 # List of users who can accept/reject leads (telegram user IDs)
 # Replace with real user IDs of managers/sales people
-MANAGER_IDS = [
-    123456789,  # Manager 1 — REPLACE WITH REAL ID
-    987654321,  # Manager 2 — REPLACE WITH REAL ID
-]
+MANAGER_IDS = []
 
 # How long a lead waits before auto-reject (seconds)
 AUTO_REJECT_TIMEOUT = 60
@@ -56,6 +54,7 @@ def load_managers():
         save_managers()
 
 def save_managers():
+    os.makedirs(os.path.dirname(os.path.abspath(managers_file)), exist_ok=True)
     with open(managers_file, 'w') as f:
         json.dump({'manager_ids': MANAGER_IDS}, f)
 
@@ -210,6 +209,12 @@ def submit_lead():
 @app.route('/webhook', methods=['POST'])
 def webhook():
     """Telegram webhook endpoint — receives updates."""
+    webhook_secret = os.environ.get('TELEGRAM_WEBHOOK_SECRET', '')
+    supplied_secret = request.headers.get('X-Telegram-Bot-Api-Secret-Token', '')
+    if not webhook_secret:
+        return jsonify({'ok': False, 'error': 'Webhook secret is not configured'}), 503
+    if not hmac.compare_digest(supplied_secret, webhook_secret):
+        return jsonify({'ok': False, 'error': 'Unauthorized'}), 403
     try:
         data = request.get_json(force=True)
     except:
@@ -229,37 +234,48 @@ def handle_message(msg):
     text = msg.get('text', '')
 
     if text == '/start':
+        if msg['chat'].get('type') != 'private':
+            bot.send_message(chat_id=chat_id, text="Для подключения к заявкам откройте со мной личный чат и отправьте /start.")
+            return
+        if chat_id not in MANAGER_IDS:
+            MANAGER_IDS.append(chat_id)
+            try:
+                save_managers()
+            except OSError:
+                MANAGER_IDS.remove(chat_id)
+                bot.send_message(chat_id=chat_id, text="Не удалось подключить вас к заявкам. Попробуйте позже.")
+                return
         bot.send_message(
             chat_id=chat_id,
             text=(
                 "👋 <b>Добро пожаловать в JAC MOTORS ANGREN!</b>\n\n"
-                "Вы зарегистрированы как менеджер по заявкам.\n"
-                "Когда клиент оставит заявку, вы получите уведомление с кнопками:\n"
-                "✅ Принять — увидите контакты клиента\n"
-                "❌ Отказать — заявка уйдёт другому менеджеру\n\n"
-                "<i>Ваш ID: {}</i>".format(chat_id)
+                "Вы подключены к заявкам как менеджер.\n"
+                "Уведомления будут приходить сюда. Нажмите «Принять», чтобы увидеть имя и телефон клиента.\n"
+                "Данные заявок предназначены только для связи с клиентом."
             ),
             parse_mode='HTML'
         )
-        # Auto-register as manager
-        if chat_id not in MANAGER_IDS:
-            MANAGER_IDS.append(chat_id)
-            save_managers()
-
     elif text == '/managers':
+        if chat_id not in MANAGER_IDS:
+            bot.send_message(chat_id=chat_id, text="Сначала отправьте /start, чтобы подключиться к заявкам.")
+            return
         if MANAGER_IDS:
-            ids = '\n'.join([f"• <code>{mid}</code>" for mid in MANAGER_IDS])
-            bot.send_message(chat_id=chat_id, text=f"📋 <b>Менеджеры:</b>\n\n{ids}", parse_mode='HTML')
+            bot.send_message(chat_id=chat_id, text=f"📋 Подключено менеджеров: {len(MANAGER_IDS)}")
         else:
             bot.send_message(chat_id=chat_id, text="Пока нет зарегистрированных менеджеров.")
 
     elif text == '/remove':
         if chat_id in MANAGER_IDS:
             MANAGER_IDS.remove(chat_id)
-            save_managers()
-            bot.send_message(chat_id=chat_id, text="Вы удалены из списка менеджеров.")
+            try:
+                save_managers()
+            except OSError:
+                MANAGER_IDS.append(chat_id)
+                bot.send_message(chat_id=chat_id, text="Не удалось отключить уведомления. Попробуйте позже.")
+                return
+            bot.send_message(chat_id=chat_id, text="Вы отключены от заявок. Чтобы подключиться снова, отправьте /start.")
         else:
-            bot.send_message(chat_id=chat_id, text="Вас нет в списке менеджеров.")
+            bot.send_message(chat_id=chat_id, text="Вы не подключены к заявкам.")
 
 def handle_callback(cb):
     if not bot:
@@ -278,6 +294,12 @@ def handle_callback(cb):
     if not lead:
         try:
             bot.answer_callback_query(cb['id'], "Заявка уже неактуальна")
+        except:
+            pass
+        return
+    if chat_id != lead.get('current_manager') or chat_id not in MANAGER_IDS:
+        try:
+            bot.answer_callback_query(cb['id'], "Эта заявка назначена другому менеджеру")
         except:
             pass
         return
